@@ -11,8 +11,9 @@ load_dotenv()
 
 async def main():
     try:
-        result = get_ipo_calendar(from_date="2020-05-01", to="2020-06-01")
-        await save_to_db(IpoCalendar, result)
+        result = get_ipo_calendar(from_date="2020-05-01", to_date="2020-06-01")
+        print(result)
+        await save_to_db(IpoCalendar, result['ipoCalendar'])
     finally:
         await engine.dispose()
 

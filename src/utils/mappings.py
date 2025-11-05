@@ -8,7 +8,7 @@ from Finnhub API to the database using the ETL utilities.
 from datetime import datetime, timedelta
 from typing import List, Dict, Any
 
-from src.config import (
+from config import (
     get_company_profile,
     get_company_news,
     get_quote,
@@ -21,16 +21,16 @@ from src.config import (
     get_dividends,
     get_insider_transactions,
 )
-from src.models.company import CompanyProfile
-from src.models.news import CompanyNews
-from src.models.market_data import StockQuote, StockCandle
-from src.models.company_data import CompanyPeer
-from src.models.financials import BasicFinancials
-from src.models.earnings import RevenueEstimate, EpsEstimate
-from src.models.recommendations import RecommendationTrend
-from src.models.corporate_actions import Dividend
-from src.models.ownership import InsiderTransaction
-from src.utils.etl import (
+from models.company import CompanyProfile
+from models.news import CompanyNews
+from models.market_data import StockQuote, StockCandle
+from models.company_data import CompanyPeer
+from models.financials import BasicFinancials
+from models.earnings import RevenueEstimate, EpsEstimate
+from models.recommendations import RecommendationTrend
+from models.corporate_actions import Dividend
+from models.ownership import InsiderTransaction
+from utils.etl import (
     transform_candles_response,
     transform_peers_response,
     transform_estimates_response,

@@ -6,7 +6,7 @@ import logging
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
 from sqlmodel import SQLModel
 
-from src.database.core import get_session
+from database.core import get_session
 
 T = TypeVar("T", bound=SQLModel)
 

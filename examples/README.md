@@ -13,9 +13,9 @@ The ETL utilities provide a flexible, mapping-based approach to fetch data from 
 Single operation to fetch data and store in database.
 
 ```python
-from src.config import get_company_profile
-from src.models.company import CompanyProfile
-from src.utils import fetch_and_store
+from config import get_company_profile
+from models.company import CompanyProfile
+from utils import fetch_and_store
 
 result = await fetch_and_store(
     handler_func=get_company_profile,
@@ -36,7 +36,7 @@ result = await fetch_and_store(
 Execute multiple fetch-and-store operations.
 
 ```python
-from src.utils import batch_fetch_and_store, get_company_data_mappings
+from utils import batch_fetch_and_store, get_company_data_mappings
 
 mappings = get_company_data_mappings('AAPL')
 results = await batch_fetch_and_store(mappings)
@@ -71,9 +71,9 @@ Helper functions to transform API responses:
 ### Pattern 1: Fetch Single Data Point
 
 ```python
-from src.config import get_quote
-from src.models.market_data import StockQuote
-from src.utils import fetch_and_store
+from config import get_quote
+from models.market_data import StockQuote
+from utils import fetch_and_store
 
 quote = await fetch_and_store(
     handler_func=get_quote,
@@ -86,9 +86,9 @@ quote = await fetch_and_store(
 ### Pattern 2: Fetch with Transformation
 
 ```python
-from src.config import get_peers
-from src.models.company_data import CompanyPeer
-from src.utils import fetch_and_store, transform_peers_response
+from config import get_peers
+from models.company_data import CompanyPeer
+from utils import fetch_and_store, transform_peers_response
 
 symbol = 'AAPL'
 peers = await fetch_and_store(
@@ -102,7 +102,7 @@ peers = await fetch_and_store(
 ### Pattern 3: Batch Operations with Pre-configured Mappings
 
 ```python
-from src.utils import batch_fetch_and_store, get_company_data_mappings
+from utils import batch_fetch_and_store, get_company_data_mappings
 
 # Fetch all company data
 mappings = get_company_data_mappings('MSFT')
@@ -117,9 +117,9 @@ for name, result in results.items():
 ### Pattern 4: Custom Mapping
 
 ```python
-from src.config import get_company_news
-from src.models.news import CompanyNews
-from src.utils import batch_fetch_and_store
+from config import get_company_news
+from models.news import CompanyNews
+from utils import batch_fetch_and_store
 
 mappings = [
     {
@@ -141,7 +141,7 @@ results = await batch_fetch_and_store(mappings)
 ### Pattern 5: Multiple Symbols
 
 ```python
-from src.utils import batch_fetch_and_store, get_company_data_mappings
+from utils import batch_fetch_and_store, get_company_data_mappings
 
 symbols = ['AAPL', 'GOOGL', 'MSFT']
 

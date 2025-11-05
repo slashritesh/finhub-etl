@@ -20,9 +20,13 @@ async def example_1_single_fetch():
     print("Example 1: Fetch and store company profile")
     print("="*60)
 
-    from src.config import get_company_profile
-    from src.models.company import CompanyProfile
-    from src.utils import fetch_and_store
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+    from config import get_company_profile
+    from models.company import CompanyProfile
+    from utils import fetch_and_store
 
     result = await fetch_and_store(
         handler_func=get_company_profile,
@@ -42,9 +46,13 @@ async def example_2_with_transform():
     print("Example 2: Fetch and store company peers")
     print("="*60)
 
-    from src.config import get_peers
-    from src.models.company_data import CompanyPeer
-    from src.utils import fetch_and_store, transform_peers_response
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+    from config import get_peers
+    from models.company_data import CompanyPeer
+    from utils import fetch_and_store, transform_peers_response
 
     symbol = 'AAPL'
     result = await fetch_and_store(
@@ -66,7 +74,11 @@ async def example_3_batch_operation():
     print("Example 3: Batch fetch company data")
     print("="*60)
 
-    from src.utils import batch_fetch_and_store, get_company_data_mappings
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+    from utils import batch_fetch_and_store, get_company_data_mappings
 
     symbol = 'MSFT'
     mappings = get_company_data_mappings(symbol)
@@ -85,7 +97,11 @@ async def example_4_market_data():
     print("Example 4: Fetch stock candles")
     print("="*60)
 
-    from src.utils import batch_fetch_and_store, get_market_data_mappings
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+    from utils import batch_fetch_and_store, get_market_data_mappings
 
     symbol = 'GOOGL'
     mappings = get_market_data_mappings(
@@ -107,7 +123,11 @@ async def example_5_news_data():
     print("Example 5: Fetch company news")
     print("="*60)
 
-    from src.utils import batch_fetch_and_store, get_news_mappings
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+    from utils import batch_fetch_and_store, get_news_mappings
 
     symbol = 'TSLA'
     mappings = get_news_mappings(symbol=symbol, days_back=7)
@@ -125,7 +145,11 @@ async def example_6_full_company_data():
     print("Example 6: Fetch complete company dataset")
     print("="*60)
 
-    from src.utils import batch_fetch_and_store, get_full_company_mappings
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+    from utils import batch_fetch_and_store, get_full_company_mappings
 
     symbol = 'AAPL'
     print(f"Fetching all available data for {symbol}...")
@@ -153,7 +177,11 @@ async def example_7_multiple_symbols():
     print("Example 7: Fetch data for multiple companies")
     print("="*60)
 
-    from src.utils import batch_fetch_and_store, get_company_data_mappings
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+    from utils import batch_fetch_and_store, get_company_data_mappings
 
     symbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN']
 
