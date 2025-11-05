@@ -1,0 +1,71 @@
+{
+  "count": 11,
+  "result": [
+    {
+      "description": "UNIPOLSAI ASSICURAZIONI SPA",
+      "displaySymbol": "US.VI",
+      "symbol": "US.VI",
+      "type": "Common Stock"
+    },
+    {
+      "description": "Industrial and Commercial Bank of China Ltd",
+      "displaySymbol": "601398.SS",
+      "symbol": "601398.SS",
+      "type": "Common Stock"
+    },
+    {
+      "description": "International Business Machines Corp",
+      "displaySymbol": "IBM",
+      "symbol": "IBM",
+      "type": "Common Stock"
+    },
+    {
+      "description": "T-Mobile US Inc",
+      "displaySymbol": "TMUS",
+      "symbol": "TMUS",
+      "type": "Common Stock"
+    },
+    {
+      "description": "Reliance Industries Ltd",
+      "displaySymbol": "RELIANCE.NS",
+      "symbol": "RELIANCE.NS",
+      "type": "Common Stock"
+    },
+    {
+      "description": "Foxconn Industrial Internet Co Ltd",
+      "displaySymbol": "601138.SS",
+      "symbol": "601138.SS",
+      "type": "Common Stock"
+    },
+    {
+      "description": "Airbus SE",
+      "displaySymbol": "AIR.PA",
+      "symbol": "AIR.PA",
+      "type": "Common Stock"
+    },
+    {
+      "description": "Commonwealth Bank of Australia",
+      "displaySymbol": "CBA.AX",
+      "symbol": "CBA.AX",
+      "type": "Common Stock"
+    },
+    {
+      "description": "Industria de Diseno Textil SA",
+      "displaySymbol": "ITX.MC",
+      "symbol": "ITX.MC",
+      "type": "Common Stock"
+    },
+    {
+      "description": "Prosus NV",
+      "displaySymbol": "PRX.AS",
+      "symbol": "PRX.AS",
+      "type": "Common Stock"
+    },
+    {
+      "description": "Anheuser-Busch Inbev SA",
+      "displaySymbol": "ABI.BR",
+      "symbol": "ABI.BR",
+      "type": "Common Stock"
+    }
+  ]
+}

@@ -138,3 +138,4 @@ The project uses the `finnhub-python` client library. Current implementation in 
 
 API key validation occurs at startup - script will fail fast if key is missing.
 - When You read file before implementation i am also along with you manually writting fixing code so follow that pattren of code if i am overwitting it
+- always use poetry i am using poetry as pakage manager
