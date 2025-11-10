@@ -1,97 +1,233 @@
-import sys
-from pathlib import Path
-
-# Add project root to Python path
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
-
-from dotenv import load_dotenv
 import asyncio
-from src.database.core import engine
+from pathlib import Path
+import sys
+from datetime import datetime, timedelta
+
+# Add parent directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from src.config.handlers import (
+    get_stock_symbols,
     get_company_profile,
-    get_quote,
+    get_company_profile2,
+    get_company_peers,
+    get_company_ownership,
     get_company_news,
-    get_earnings_calendar,
-    get_basic_financials,
-    get_recommendation_trends,
+    get_press_release,
+    get_fund_ownership,
+    get_institutional_profile,
+    get_institutional_portfolio,
     get_institutional_ownership,
-    get_peers,
+    get_company_basic_financials,
+    get_company_financials,
+    get_company_reported_financials,
+    get_company_dividends,
+    get_company_price_metrics,
+    get_sector_metrics,
+    get_ipo_calendar,
+    get_historical_mcap,
 )
 
-# Load environment variables from .env file
-load_dotenv()
+
+# Handler Test Mapping Array
+HANDLER_TESTS = [
+    {
+        "handler": get_stock_symbols,
+        "name": "Stock Symbols",
+        "params": {"exchange": "US"},
+    },
+    {
+        "handler": get_company_profile,
+        "name": "Company Profile (v1)",
+        "params": {"symbol": "AAPL"},
+    },
+    {
+        "handler": get_company_profile2,
+        "name": "Company Profile (v2)",
+        "params": {"symbol": "AAPL"},
+    },
+    {
+        "handler": get_company_peers,
+        "name": "Company Peers",
+        "params": {"symbol": "AAPL"},
+    },
+    {
+        "handler": get_company_ownership,
+        "name": "Company Ownership",
+        "params": {
+            "symbol": "AAPL",
+            "from_date": "2020-01-01",
+            "to_date": "2024-12-31",
+        },
+    },
+    {
+        "handler": get_company_news,
+        "name": "Company News",
+        "params": {
+            "symbol": "AAPL",
+            "from_date": (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d"),
+            "to_date": datetime.now().strftime("%Y-%m-%d"),
+        },
+    },
+    {
+        "handler": get_press_release,
+        "name": "Press Releases",
+        "params": {
+            "symbol": "AAPL",
+            "from_date": "2024-01-01",
+            "to_date": "2024-12-31",
+        },
+    },
+    {
+        "handler": get_fund_ownership,
+        "name": "Fund Ownership",
+        "params": {
+            "symbol": "AAPL",
+            "from_date": "2020-01-01",
+            "to_date": "2024-12-31",
+        },
+    },
+    {
+        "handler": get_institutional_profile,
+        "name": "Institutional Profile",
+        "params": {},
+    },
+    {
+        "handler": get_institutional_portfolio,
+        "name": "Institutional Portfolio",
+        "params": {
+            "cik": "0001067983",
+            "from_date": "2020-01-01",
+            "to_date": "2024-12-31",
+        },
+    },
+    {
+        "handler": get_institutional_ownership,
+        "name": "Institutional Ownership",
+        "params": {
+            "symbol": "AAPL",
+            "from_date": "2020-01-01",
+            "to_date": "2024-12-31",
+        },
+    },
+    {
+        "handler": get_company_basic_financials,
+        "name": "Company Basic Financials",
+        "params": {"symbol": "AAPL", "metric": "all"},
+    },
+    {
+        "handler": get_company_financials,
+        "name": "Company Financials",
+        "params": {"symbol": "AAPL", "statement": "income", "freq": "annual"},
+    },
+    {
+        "handler": get_company_reported_financials,
+        "name": "Company Reported Financials",
+        "params": {"symbol": "AAPL"},
+    },
+    {
+        "handler": get_company_dividends,
+        "name": "Company Dividends",
+        "params": {
+            "symbol": "AAPL",
+            "from_date": "2020-01-01",
+            "to_date": "2024-12-31",
+        },
+    },
+    {
+        "handler": get_company_price_metrics,
+        "name": "Company Price Metrics",
+        "params": {"symbol": "AAPL"},
+    },
+    {
+        "handler": get_sector_metrics,
+        "name": "Sector Metrics",
+        "params": {"region": "US"},
+    },
+    {
+        "handler": get_ipo_calendar,
+        "name": "IPO Calendar",
+        "params": {
+            "from_date": (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d"),
+            "to_date": datetime.now().strftime("%Y-%m-%d"),
+        },
+    },
+    {
+        "handler": get_historical_mcap,
+        "name": "Historical Market Cap",
+        "params": {
+            "symbol": "AAPL",
+            "from_date": "2024-01-01",
+            "to_date": "2024-12-31",
+        },
+    },
+]
+
+
+async def test_handler(handler, name, params):
+    """Test if handler is callable and returns data."""
+    try:
+        data = await handler(**params)
+
+        if data:
+            count = len(data) if isinstance(data, list) else "N/A"
+            return {"status": "PASS", "count": count}
+        else:
+            return {"status": "FAIL", "error": "No data returned"}
+
+    except Exception as e:
+        return {"status": "FAIL", "error": str(e)}
+
+
+async def run_tests():
+    """Run all handler tests."""
+    print("=" * 60)
+    print("RUNNING HANDLER TESTS")
+    print("=" * 60)
+    print()
+
+    results = []
+
+    for idx, test in enumerate(HANDLER_TESTS, 1):
+        print(f"[{idx}/{len(HANDLER_TESTS)}] Testing {test['name']}...", end=" ")
+
+        result = await test_handler(test["handler"], test["name"], test["params"])
+        result["name"] = test["name"]
+        results.append(result)
+
+        if result["status"] == "PASS":
+            count_info = f" ({result['count']} records)" if result['count'] != "N/A" else ""
+            print(f"[PASS]{count_info}")
+        else:
+            print(f"[FAIL]")
+            print(f"  Error: {result['error']}")
+
+    # Summary
+    print()
+    print("=" * 60)
+    print("TEST SUMMARY")
+    print("=" * 60)
+
+    passed = sum(1 for r in results if r["status"] == "PASS")
+    failed = sum(1 for r in results if r["status"] == "FAIL")
+
+    print(f"Total: {len(results)} | Passed: {passed} | Failed: {failed}")
+    print()
+
+    if failed > 0:
+        print("Failed Tests:")
+        for r in results:
+            if r["status"] == "FAIL":
+                print(f"  - {r['name']}: {r['error']}")
+
+    return results
 
 
 async def main():
-    try:
-        symbol = "AAPL"
-        print(f"\n{'='*60}")
-        print(f"Testing Finnhub API Handlers for {symbol}")
-        print(f"{'='*60}\n")
-
-        # Test 1: Company Profile
-        print(f"1. Fetching company profile for {symbol}...")
-        profile = await get_company_profile(symbol)
-        print(f"   Company: {profile.get('name', 'N/A')}")
-        print(f"   Industry: {profile.get('finnhubIndustry', 'N/A')}")
-        print(f"   Market Cap: ${profile.get('marketCapitalization', 0):,.0f}M\n")
-
-        # Test 2: Quote Data
-        print(f"2. Fetching current quote for {symbol}...")
-        quote = await get_quote(symbol)
-        print(f"   Current Price: ${quote.get('c', 0):.2f}")
-        print(f"   Change: ${quote.get('d', 0):.2f} ({quote.get('dp', 0):.2f}%)\n")
-
-        # Test 3: Company News
-        print(f"3. Fetching recent news for {symbol}...")
-        news = await get_company_news(symbol, "2025-01-01", "2025-01-08")
-        print(f"   Found {len(news)} news articles")
-        if news:
-            print(f"   Latest: {news[0].get('headline', 'N/A')[:80]}...\n")
-
-        # Test 4: Earnings Calendar
-        print(f"4. Fetching earnings calendar...")
-        earnings = await get_earnings_calendar("2025-01-01", "2025-01-31")
-        earnings_count = len(earnings.get('earningsCalendar', []))
-        print(f"   Found {earnings_count} earnings announcements\n")
-
-        # Test 5: Basic Financials
-        print(f"5. Fetching basic financials for {symbol}...")
-        financials = await get_basic_financials(symbol)
-        metrics = financials.get('metric', {})
-        print(f"   P/E Ratio: {metrics.get('peNormalizedAnnual', 'N/A')}")
-        print(f"   52-Week High: ${metrics.get('52WeekHigh', 'N/A')}")
-        print(f"   52-Week Low: ${metrics.get('52WeekLow', 'N/A')}\n")
-
-        # Test 6: Recommendation Trends
-        print(f"6. Fetching recommendation trends for {symbol}...")
-        recommendations = await get_recommendation_trends(symbol)
-        if recommendations:
-            latest = recommendations[0]
-            print(f"   Period: {latest.get('period', 'N/A')}")
-            print(f"   Buy: {latest.get('buy', 0)}, Hold: {latest.get('hold', 0)}, Sell: {latest.get('sell', 0)}\n")
-
-        # Test 7: Institutional Ownership
-        print(f"7. Fetching institutional ownership for {symbol}...")
-        ownership = await get_institutional_ownership(symbol)
-        ownership_data = ownership.get('data', [])
-        print(f"   Found {len(ownership_data)} institutional holders")
-        if ownership_data:
-            top_holder = ownership_data[0]
-            print(f"   Top Holder: {top_holder.get('name', 'N/A')}\n")
-
-        # Test 8: Peers
-        print(f"8. Fetching peer companies for {symbol}...")
-        peers = await get_peers(symbol)
-        print(f"   Peers: {', '.join(peers[:5])}\n")
-
-        print(f"{'='*60}")
-        print("All handler tests completed successfully!")
-        print(f"{'='*60}\n")
-
-    finally:
-        await engine.dispose()
+    """Main entry point."""
+    print("Starting Finnhub API Handler Tests\n")
+    await run_tests()
+    print("\nNote: To save data to database, run: make test-store-db")
 
 
 if __name__ == "__main__":

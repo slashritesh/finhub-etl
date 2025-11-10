@@ -1,545 +1,322 @@
 from .finhub import api_client
 
 
-# ========================================
-# 🧠 Search & General Info
-# ========================================
-
-async def search_symbols(query):
-    """Search for stock symbols.
-
-    Args:
-        query (str): Search query string
-
-    Returns:
-        dict: Search results with matching symbols
-    """
-    return await api_client.get("/search", params={"q": query})
-
-
 async def get_stock_symbols(exchange):
     """Get all stock symbols for a given exchange.
-
     Args:
         exchange (str): Exchange code (e.g., 'US', 'TO', 'L')
-
     Returns:
         list: List of stock symbols on the exchange
     """
     return await api_client.get("/stock/symbol", params={"exchange": exchange})
 
 
-# ========================================
-# 🏢 Company Data
-# ========================================
-
-async def get_company_profile(symbol):
-    """Get company profile (v2).
-
+async def get_company_profile(symbol: str = None, isin: str = None, cusip: str = None) -> dict:
+    """Fetch the full company profile for a given company.
     Args:
-        symbol (str): Stock symbol (e.g., 'AAPL')
+        symbol (str, optional): Stock ticker symbol (e.g., 'AAPL').
+        isin (str, optional): ISIN code of the company.
+        cusip (str, optional): CUSIP code of the company.
+    Returns:
+        dict: Company profile data
+    """
+    params = {}
+    if symbol:
+        params["symbol"] = symbol
+    if isin:
+        params["isin"] = isin
+    if cusip:
+        params["cusip"] = cusip
 
+    return await api_client.get("/stock/profile", params=params)
+
+
+async def get_company_profile2(symbol: str) -> dict:
+    """Fetch the company profile for a given stock symbol.
+    Args:
+        symbol (str): Stock ticker symbol (e.g., 'AAPL', 'GOOGL')
     Returns:
         dict: Company profile data
     """
     return await api_client.get("/stock/profile2", params={"symbol": symbol})
 
 
-async def get_executives(symbol):
-    """Get company executives.
-
-    Args:
-        symbol (str): Stock symbol
-
-    Returns:
-        dict: Company executives information
+async def get_company_news(symbol: str, from_date: str, to_date: str) :
     """
-    return await api_client.get("/stock/executive", params={"symbol": symbol})
-
-
-async def get_peers(symbol):
-    """Get peer companies.
-
+    Fetch company-specific news for a given stock symbol.
     Args:
-        symbol (str): Stock symbol
-
+        symbol (str): Stock ticker symbol (e.g., 'AAPL')
+        from_date (str): Start date in YYYY-MM-DD format (e.g., '2024-01-01')
+        to_date (str): End date in YYYY-MM-DD format (e.g., '2024-12-31')
     Returns:
-        list: List of peer company symbols
+        list: List of news articles (JSON objects)
+    """
+    return await api_client.get(
+        "/company-news", params={"symbol": symbol, "from": from_date, "to": to_date}
+    )
+
+
+async def get_company_peers(symbol: str) -> list :
+    """
+    Fetch peer companies for a given company symbol.
+    Args:
+        symbol (str): Stock ticker symbol (e.g., 'AAPL')
+    Returns:
+        list: List of ticker symbols of peer companies
     """
     return await api_client.get("/stock/peers", params={"symbol": symbol})
 
 
-# ========================================
-# 💵 Quotes & Market Data
-# ========================================
-
-async def get_quote(symbol):
-    """Get real-time stock quote.
-
-    Args:
-        symbol (str): Stock symbol
-
-    Returns:
-        dict: Real-time quote data
+async def get_press_release(
+    symbol: str, from_date: str = None, to_date: str = None
+) :
     """
-    return await api_client.get("/quote", params={"symbol": symbol})
-
-
-async def get_order_book(symbol):
-    """Get live order book data.
-
+    Fetch press releases for a given company symbol.
     Args:
-        symbol (str): Stock symbol
-
+        symbol (str): Stock ticker (e.g., 'AAPL')
+        from_date (str, optional): Start date 'YYYY-MM-DD'
+        to_date (str, optional): End date 'YYYY-MM-DD'
     Returns:
-        dict: Order book data with bids and asks
-    """
-    return await api_client.get("/stock/bidask", params={"symbol": symbol})
-
-
-async def get_stock_candles(symbol, resolution, from_timestamp, to_timestamp):
-    """Get historical candlestick data.
-
-    Args:
-        symbol (str): Stock symbol
-        resolution (str): Candle resolution ('1', '5', '15', '30', '60', 'D', 'W', 'M')
-        from_timestamp (int): Unix timestamp for start date
-        to_timestamp (int): Unix timestamp for end date
-
-    Returns:
-        dict: OHLCV candlestick data
-    """
-    params = {
-        "symbol": symbol,
-        "resolution": resolution,
-        "from": from_timestamp,
-        "to": to_timestamp
-    }
-    return await api_client.get("/stock/candle", params=params)
-
-
-# ========================================
-# 📰 News & Press
-# ========================================
-
-async def get_company_news(symbol, from_date, to_date):
-    """Get recent company news.
-
-    Args:
-        symbol (str): Stock symbol
-        from_date (str): Start date (YYYY-MM-DD)
-        to_date (str): End date (YYYY-MM-DD)
-
-    Returns:
-        list: List of news articles
-    """
-    params = {"symbol": symbol, "from": from_date, "to": to_date}
-    return await api_client.get("/company-news", params=params)
-
-
-async def get_general_news(category='general', min_id=0):
-    """Get general market news.
-
-    Args:
-        category (str): News category (default: 'general')
-        min_id (int): Minimum news ID for pagination
-
-    Returns:
-        list: List of general news articles
-    """
-    params = {"category": category, "minId": min_id}
-    return await api_client.get("/news", params=params)
-
-
-async def get_press_releases(symbol, from_date=None, to_date=None):
-    """Get press releases for a company.
-
-    Args:
-        symbol (str): Stock symbol
-        from_date (str, optional): Start date (YYYY-MM-DD)
-        to_date (str, optional): End date (YYYY-MM-DD)
-
-    Returns:
-        dict: Press releases data
+        list: List of press-release entries (JSON objects)
     """
     params = {"symbol": symbol}
-    if from_date and to_date:
+    if from_date:
         params["from"] = from_date
+    if to_date:
         params["to"] = to_date
-    return await api_client.get("/press-releases", params=params)
+
+    return await api_client.get("/press-releases2", params=params)
 
 
-# ========================================
-# 💰 Financials
-# ========================================
-
-async def get_basic_financials(symbol, metric='all'):
-    """Get basic financial metrics.
-
-    Args:
-        symbol (str): Stock symbol
-        metric (str): Metric type (default: 'all')
-
-    Returns:
-        dict: Basic financial metrics and ratios
+async def get_company_ownership(
+    symbol: str = None, cusip: str = None, from_date: str = None, to_date: str = None
+) -> dict :
     """
-    params = {"symbol": symbol, "metric": metric}
-    return await api_client.get("/stock/metric", params=params)
-
-
-async def get_financials_as_reported(symbol, freq='annual'):
-    """Get financials as reported (annual/quarterly).
-
+    Fetch full list of shareholders (institutional + other) of a company over time.
     Args:
-        symbol (str): Stock symbol
-        freq (str): Frequency ('annual' or 'quarterly')
-
+        symbol (str, optional): Stock ticker symbol (e.g., 'AAPL')
+        cusip (str, optional): CUSIP code of the company
+        from_date (str, optional): Start date in YYYY-MM-DD format
+        to_date (str, optional): End date in YYYY-MM-DD format
     Returns:
-        dict: Financial reports as filed
+        list: Ownership entries
     """
-    params = {"symbol": symbol, "freq": freq}
-    return await api_client.get("/stock/financials-reported", params=params)
-
-
-async def get_standardized_financials(symbol, statement, freq='annual'):
-    """Get standardized financial statements.
-
-    Args:
-        symbol (str): Stock symbol
-        statement (str): Statement type ('income', 'balance', 'cash')
-        freq (str): Frequency ('annual' or 'quarterly')
-
-    Returns:
-        dict: Standardized financial statements
-    """
-    params = {"symbol": symbol, "statement": statement, "freq": freq}
-    return await api_client.get("/stock/financials", params=params)
-
-
-# ========================================
-# 📈 Estimates & Earnings
-# ========================================
-
-async def get_revenue_estimates(symbol, freq='annual'):
-    """Get revenue estimates.
-
-    Args:
-        symbol (str): Stock symbol
-        freq (str): Frequency ('annual' or 'quarterly')
-
-    Returns:
-        dict: Revenue estimates data
-    """
-    params = {"symbol": symbol, "freq": freq}
-    return await api_client.get("/stock/revenue-estimate", params=params)
-
-
-async def get_eps_estimates(symbol, freq='annual'):
-    """Get EPS estimates.
-
-    Args:
-        symbol (str): Stock symbol
-        freq (str): Frequency ('annual' or 'quarterly')
-
-    Returns:
-        dict: EPS estimates data
-    """
-    params = {"symbol": symbol, "freq": freq}
-    return await api_client.get("/stock/eps-estimate", params=params)
-
-
-async def get_earnings_calendar(from_date, to_date, symbol=None, international=False):
-    """Get upcoming earnings calendar.
-
-    Args:
-        from_date (str): Start date (YYYY-MM-DD)
-        to_date (str): End date (YYYY-MM-DD)
-        symbol (str, optional): Filter by symbol
-        international (bool): Include international symbols
-
-    Returns:
-        dict: Earnings calendar data
-    """
-    params = {"from": from_date, "to": to_date, "international": international}
+    params = {}
     if symbol:
         params["symbol"] = symbol
-    return await api_client.get("/calendar/earnings", params=params)
-
-
-async def get_historical_earnings(symbol, limit=None):
-    """Get past earnings data.
-
-    Args:
-        symbol (str): Stock symbol
-        limit (int, optional): Limit number of results
-
-    Returns:
-        list: Historical earnings data
-    """
-    params = {"symbol": symbol}
-    if limit:
-        params["limit"] = limit
-    return await api_client.get("/stock/earnings", params=params)
-
-
-# ========================================
-# 📊 Recommendations & Ratings
-# ========================================
-
-async def get_recommendation_trends(symbol):
-    """Get analyst recommendation trends.
-
-    Args:
-        symbol (str): Stock symbol
-
-    Returns:
-        list: Recommendation trends over time
-    """
-    return await api_client.get("/stock/recommendation", params={"symbol": symbol})
-
-
-async def get_upgrade_downgrades(symbol, from_date=None, to_date=None):
-    """Get upgrade/downgrade rating changes.
-
-    Args:
-        symbol (str): Stock symbol
-        from_date (str, optional): Start date (YYYY-MM-DD)
-        to_date (str, optional): End date (YYYY-MM-DD)
-
-    Returns:
-        list: Rating change history
-    """
-    params = {"symbol": symbol}
-    if from_date and to_date:
-        params["from"] = from_date
-        params["to"] = to_date
-    return await api_client.get("/stock/upgrade-downgrade", params=params)
-
-
-async def get_price_target(symbol):
-    """Get price targets.
-
-    Args:
-        symbol (str): Stock symbol
-
-    Returns:
-        dict: Analyst price target data
-    """
-    return await api_client.get("/stock/price-target", params={"symbol": symbol})
-
-
-# ========================================
-# 🧾 Filings, Splits, Dividends
-# ========================================
-
-async def get_dividends(symbol, from_date, to_date):
-    """Get dividend data.
-
-    Args:
-        symbol (str): Stock symbol
-        from_date (str): Start date (YYYY-MM-DD)
-        to_date (str): End date (YYYY-MM-DD)
-
-    Returns:
-        list: Dividend history
-    """
-    params = {"symbol": symbol, "from": from_date, "to": to_date}
-    return await api_client.get("/stock/dividend", params=params)
-
-
-async def get_splits(symbol, from_date, to_date):
-    """Get stock split history.
-
-    Args:
-        symbol (str): Stock symbol
-        from_date (str): Start date (YYYY-MM-DD)
-        to_date (str): End date (YYYY-MM-DD)
-
-    Returns:
-        list: Stock split history
-    """
-    params = {"symbol": symbol, "from": from_date, "to": to_date}
-    return await api_client.get("/stock/split", params=params)
-
-
-async def get_filings(symbol, from_date=None, to_date=None, form=None):
-    """Get SEC filings.
-
-    Args:
-        symbol (str): Stock symbol
-        from_date (str, optional): Start date (YYYY-MM-DD)
-        to_date (str, optional): End date (YYYY-MM-DD)
-        form (str, optional): Filing form type
-
-    Returns:
-        list: SEC filings data
-    """
-    params = {'symbol': symbol}
+    if cusip:
+        params["cusip"] = cusip
     if from_date:
-        params['from'] = from_date
-    if to_date:
-        params['to'] = to_date
-    if form:
-        params['form'] = form
-    return await api_client.get("/stock/filings", params=params)
-
-
-# ========================================
-# 👥 Insider & Institutional
-# ========================================
-
-async def get_insider_transactions(symbol, from_date=None, to_date=None):
-    """Get insider transactions.
-
-    Args:
-        symbol (str): Stock symbol
-        from_date (str, optional): Start date (YYYY-MM-DD)
-        to_date (str, optional): End date (YYYY-MM-DD)
-
-    Returns:
-        dict: Insider transaction data
-    """
-    params = {"symbol": symbol}
-    if from_date and to_date:
         params["from"] = from_date
+    if to_date:
         params["to"] = to_date
-    return await api_client.get("/stock/insider-transactions", params=params)
+
+    return await api_client.get("/stock/ownership", params=params)
 
 
-async def get_institutional_ownership(symbol, from_date=None, to_date=None):
-    """Get institutional ownership data.
-
+async def get_fund_ownership(
+    symbol: str, from_date: str = None, to_date: str = None
+) :
+    """
+    Fetch the fund ownership for a given stock symbol.
     Args:
-        symbol (str): Stock symbol
-        from_date (str, optional): Start date (YYYY-MM-DD)
-        to_date (str, optional): End date (YYYY-MM-DD)
-
+        symbol (str): Stock ticker symbol (e.g., 'AAPL')
+        from_date (str, optional): Start date in YYYY-MM-DD format
+        to_date (str, optional): End date in YYYY-MM-DD format
     Returns:
-        dict: Institutional ownership data
+        list: Fund ownership entries
     """
     params = {"symbol": symbol}
     if from_date:
         params["from"] = from_date
     if to_date:
         params["to"] = to_date
-    return await api_client.get("/institutional/ownership", params=params)
 
-
-async def get_fund_ownership(symbol, limit=10):
-    """Get fund ownership data.
-
-    Args:
-        symbol (str): Stock symbol
-        limit (int): Limit number of results (default: 10)
-
-    Returns:
-        dict: Fund ownership data
-    """
-    params = {"symbol": symbol, "limit": limit}
     return await api_client.get("/stock/fund-ownership", params=params)
 
 
-async def get_institutional_profile(cik):
-    """Get institutional investor profile.
-
-    Args:
-        cik (str): CIK number of the institution
-
-    Returns:
-        dict: Institutional profile data
+async def get_institutional_profile(cik: str = None) :
     """
-    return await api_client.get("/institutional/profile", params={"cik": cik})
-
-
-async def get_institutional_portfolio(cik, from_date=None, to_date=None):
-    """Get institutional portfolio data.
-
+    Fetch institutional investor profiles (well-known institutions).
     Args:
-        cik (str): CIK number of the institution
-        from_date (str, optional): Start date (YYYY-MM-DD)
-        to_date (str, optional): End date (YYYY-MM-DD)
-
+        cik (str, optional): CIK of the institution. If omitted, fetch list of all supported institutions.
     Returns:
-        dict: Portfolio holdings data
+        list: Institution profile entries
+    """
+    params = {}
+    if cik:
+        params["cik"] = cik
+
+    return await api_client.get("/institutional/profile", params=params)
+
+
+async def get_institutional_portfolio(
+    cik: str, from_date: str = None, to_date: str = None
+) :
+    """
+    Fetch institutional investor portfolio holdings from 13-F filings.
+    Args:
+        cik (str): CIK of the institution
+        from_date (str, optional): Start date in YYYY-MM-DD format
+        to_date (str, optional): End date in YYYY-MM-DD format
+    Returns:
+        list: Portfolio holdings entries
     """
     params = {"cik": cik}
-    if from_date and to_date:
+    if from_date:
         params["from"] = from_date
+    if to_date:
         params["to"] = to_date
+
     return await api_client.get("/institutional/portfolio", params=params)
 
 
-async def get_institutional_ownership_history(symbol, from_date, to_date):
-    """Get historical institutional ownership data (alias for get_institutional_ownership).
-
-    Args:
-        symbol (str): Stock symbol
-        from_date (str): Start date (YYYY-MM-DD)
-        to_date (str): End date (YYYY-MM-DD)
-
-    Returns:
-        dict: Historical ownership data
+async def get_institutional_ownership(
+    symbol: str = None, cusip: str = None, from_date: str = None, to_date: str = None
+) :
     """
-    return await get_institutional_ownership(symbol, from_date, to_date)
-
-
-# ========================================
-# 🗓️ Calendar & IPOs
-# ========================================
-
-async def get_ipo_calendar(from_date, to_date):
-    """Get upcoming IPO calendar.
-
+    Fetch institutional investors' positions in a given stock over time (13-F source).
     Args:
-        from_date (str): Start date (YYYY-MM-DD)
-        to_date (str): End date (YYYY-MM-DD)
-
+        symbol (str, optional): Stock ticker symbol
+        cusip (str, optional): CUSIP code
+        from_date (str, optional): Start date in YYYY-MM-DD format
+        to_date (str, optional): End date in YYYY-MM-DD format
     Returns:
-        dict: IPO calendar data
+        list: Institutional ownership entries
     """
-    params = {"from": from_date, "to": to_date}
-    return await api_client.get("/calendar/ipo", params=params)
+    params = {}
+    if symbol:
+        params["symbol"] = symbol
+    if cusip:
+        params["cusip"] = cusip
+    if from_date:
+        params["from"] = from_date
+    if to_date:
+        params["to"] = to_date
+
+    return await api_client.get("/institutional/ownership", params=params)
 
 
-# ========================================
-# 🧭 Market Info
-# ========================================
-
-async def get_market_status(exchange):
-    """Get market status.
-
+async def get_company_basic_financials(symbol: str, metric: str = "all") :
+    """
+    Fetch basic financials for a given company.
     Args:
-        exchange (str): Exchange code (e.g., 'US')
-
+        symbol (str): Stock ticker symbol (e.g., 'AAPL')
+        metric (str): Metric type, e.g., 'all', 'price', 'valuation', 'margin'. :contentReference[oaicite:1]{index=1}
     Returns:
-        dict: Current market status
+        dict: Basic financials data
     """
-    return await api_client.get("/stock/market-status", params={"exchange": exchange})
+    return await api_client.get(
+        "/stock/metric", params={"symbol": symbol, "metric": metric}
+    )
+    # Note: Some docs call this /company_basic_financials endpoint. :contentReference[oaicite:2]{index=2}
 
 
-async def get_market_holidays(exchange):
-    """Get market holiday list.
-
+async def get_company_financials(
+    symbol: str, statement: str, freq: str = "annual"
+) :
+    """
+    Fetch standardized financial statements for a given company.
     Args:
-        exchange (str): Exchange code (e.g., 'US')
-
+        symbol (str): Stock ticker symbol.
+        statement (str): Type of statement e.g., 'income', 'balance_sheet', 'cash_flow'. :contentReference[oaicite:3]{index=3}
+        freq (str): Frequency of the statement — 'annual' or 'quarterly'.
     Returns:
-        dict: Market holidays
+        dict: Financial statements data
     """
-    return await api_client.get("/stock/market-holiday", params={"exchange": exchange})
+    return await api_client.get(
+        "/stock/financials",
+        params={"symbol": symbol, "statement": statement, "freq": freq},
+    )
 
 
-# ========================================
-# 🧩 Sector Data
-# ========================================
-
-async def get_sector_metrics(region='US'):
-    """Get metrics for various market sectors.
-
+async def get_company_reported_financials(symbol: str):
+    """
+    Fetch financials as reported (original filings) for a given company.
     Args:
-        region (str): Region code (default: 'US')
-
+        symbol (str): Stock ticker symbol.
     Returns:
-        dict: Sector performance metrics
+        dict: Reported financials data
     """
-    return await api_client.get("/sector/metrics", params={"region": region})
+    return await api_client.get("/stock/financials-reported", params={"symbol": symbol})
+    # This endpoint provides standardized balance sheet, income statement, cash flow for 30+ years
+
+
+
+async def get_company_dividends(symbol: str, from_date: str = None, to_date: str = None) :
+    """
+    Fetch dividend history for a given company symbol.
+    Args:
+        symbol (str): Stock ticker symbol (e.g., "AAPL")
+        from_date (str, optional): Start date in "YYYY-MM-DD" format
+        to_date (str, optional): End date in "YYYY-MM-DD" format
+    Returns:
+        list: List of dividend entries
+    """
+    params = {"symbol": symbol}
+    if from_date:
+        params["from"] = from_date
+    if to_date:
+        params["to"] = to_date
+    
+    return await api_client.get(
+        "/stock/dividend",
+        params=params
+    )
+
+
+async def get_company_price_metrics(symbol: str) :
+    """
+    Fetch price-performance metrics for a given company.
+    Args:
+        symbol (str): Stock ticker symbol (e.g., 'AAPL')
+    Returns:
+        dict: Price metrics (e.g., 52-week high/low, YTD return, etc)
+    """
+    return await api_client.get("/stock/price-metric", params={"symbol": symbol})
+
+
+
+async def get_sector_metrics(region: str = None) :
+    """
+    Fetch sector-level performance & ratio metrics.
+    Args:
+        region (str, optional): Region code or index to filter sector metrics (e.g., 'US', 'EU')
+    Returns:
+        dict: Sector metrics data
+    """
+    params = {}
+    if region:
+        params["region"] = region
+    return await api_client.get("/sector/metrics", params=params)
+
+
+async def get_ipo_calendar(from_date: str, to_date: str) :
+    """
+    Fetch IPO calendar data between two dates.
+    Args:
+        from_date (str): Start date, format 'YYYY-MM-DD'
+        to_date (str): End date, format 'YYYY-MM-DD'
+    Returns:
+        list: IPO calendar entries (recent and upcoming IPOs)
+    """
+    return await api_client.get("/calendar/ipo", params={"from": from_date, "to": to_date})
+
+
+async def get_historical_mcap(symbol: str, from_date: str = None, to_date: str = None) :
+    """
+    Fetch historical market-capitalization data for a given company symbol.
+    Args:
+        symbol (str): Stock ticker symbol (e.g., 'AAPL')
+        from_date (str, optional): Start date in 'YYYY-MM-DD' format
+        to_date (str, optional): End date in 'YYYY-MM-DD' format
+    Returns:
+        list: A list of market-cap entries (date + value)
+    """
+    params = {"symbol": symbol}
+    if from_date:
+        params["from"] = from_date
+    if to_date:
+        params["to"] = to_date
+
+    return await api_client.get("/stock/historical-market-cap", params=params)

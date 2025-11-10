@@ -57,6 +57,7 @@ async def save_to_db(
         # Batch insert
         companies = await save_to_db(CompanyProfile, [data1, data2, data3])
     """
+
     async with AsyncSession(engine) as session:
         if isinstance(data, list):
             instances = [model(**item) for item in data]
