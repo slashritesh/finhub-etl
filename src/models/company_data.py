@@ -63,6 +63,6 @@ class CompanyPeer(SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     symbol: str = Field(index=True, max_length=10)
-    peer: str = Field(index=True, max_length=10)
+    peer: Optional[str] = Field(index=True, max_length=10)
 
     created_at: dt = Field(default_factory=lambda: dt.now(timezone.utc))

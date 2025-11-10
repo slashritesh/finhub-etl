@@ -1,6 +1,7 @@
 from datetime import datetime as dt, timezone
 from typing import Optional
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Column
+from sqlalchemy import Text
 
 
 class CompanyNews(SQLModel, table=True):
@@ -20,7 +21,7 @@ class CompanyNews(SQLModel, table=True):
     image: Optional[str] = Field(default=None, max_length=500)
     related: Optional[str] = Field(default=None, max_length=500)  # Comma-separated symbols
     source: Optional[str] = Field(default=None, max_length=100)
-    summary: Optional[str] = Field(default=None)
+    summary: Optional[str] = Field(default=None, sa_column=Column(Text))
     url: Optional[str] = Field(default=None, max_length=500)
     created_at: dt = Field(default_factory=lambda: dt.now(timezone.utc))
 
@@ -41,7 +42,7 @@ class GeneralNews(SQLModel, table=True):
     image: Optional[str] = Field(default=None, max_length=500)
     related: Optional[str] = Field(default=None, max_length=500)  # Comma-separated symbols
     source: Optional[str] = Field(default=None, max_length=100)
-    summary: Optional[str] = Field(default=None)
+    summary: Optional[str] = Field(default=None, sa_column=Column(Text))
     url: Optional[str] = Field(default=None, max_length=500)
     created_at: dt = Field(default_factory=lambda: dt.now(timezone.utc))
 

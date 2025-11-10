@@ -12,8 +12,8 @@ class RevenueEstimate(SQLModel, table=True):
     __tablename__ = "revenue_estimates"
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    symbol: str = Field(index=True, max_length=10)
-    freq: str = Field(max_length=10)  # 'annual' or 'quarterly'
+    symbol: Optional[str] = Field(index=True, max_length=10)
+    freq: Optional[str] = Field(max_length=10)  # 'annual' or 'quarterly'
     period: str = Field(index=True, max_length=20)  # e.g., '2024-12-31', '2024-03-31'
 
     revenueAvg: Optional[float] = Field(default=None)
@@ -34,8 +34,8 @@ class EpsEstimate(SQLModel, table=True):
     __tablename__ = "eps_estimates"
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    symbol: str = Field(index=True, max_length=10)
-    freq: str = Field(max_length=10)  # 'annual' or 'quarterly'
+    symbol: Optional[str] = Field(index=True, max_length=10)
+    freq: Optional[str] = Field(max_length=10)  # 'annual' or 'quarterly'
     period: str = Field(index=True, max_length=20)  # e.g., '2024-12-31', '2024-03-31'
 
     epsAvg: Optional[float] = Field(default=None)

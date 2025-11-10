@@ -6,12 +6,12 @@ from sqlmodel import Field, SQLModel
 class InsiderTransaction(SQLModel, table=True):
     """Insider trading transactions.
 
-    API Response fields: symbol, name, share, change, filingDate, transactionDate, transactionCode, transactionPrice
+    API Response fields: id, symbol, name, share, change, filingDate, transactionDate, transactionCode, transactionPrice
     """
 
     __tablename__ = "insider_transactions"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: str = Field(primary_key=True, max_length=50)  # Changed to string to match API transaction IDs
     symbol: str = Field(index=True, max_length=10)
     transactionDate: str = Field(index=True, max_length=20)
     filingDate: Optional[str] = Field(default=None, max_length=20)
@@ -34,7 +34,7 @@ class InstitutionalOwnership(SQLModel, table=True):
     __tablename__ = "institutional_ownership"
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    symbol: str = Field(index=True, max_length=10)
+    symbol: Optional[str] = Field(index=True, max_length=10)
     cik: Optional[str] = Field(default=None, max_length=20, index=True)
     name: Optional[str] = Field(default=None, max_length=200)
 

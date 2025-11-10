@@ -6,7 +6,7 @@
 | `getStockSymbols(exchange)` | `/stock/symbol?exchange={exchange}` | Get all stock symbols for a given exchange. |
 
 ---
-
+v
 ### 🏢 **Company Data**
 
 | Function                    | Endpoint                           | Description               |

@@ -12,7 +12,7 @@ class IpoCalendar(SQLModel, table=True):
     __tablename__ = "ipo_calendar"
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    symbol: str = Field(index=True, max_length=10)
+    symbol: Optional[str] = Field(index=True, max_length=10)
     date: str = Field(index=True, max_length=20)  # IPO date
 
     name: Optional[str] = Field(default=None, max_length=200)

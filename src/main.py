@@ -11,7 +11,8 @@ load_dotenv()
 
 async def main():
     try:
-        result = get_ipo_calendar(from_date="2020-05-01", to_date="2020-06-01")
+        # get_ipo_calendar is now async, so we need to await it
+        result = await get_ipo_calendar(from_date="2025-10-01", to_date="2025-10-09")
         print(result)
         await save_to_db(IpoCalendar, result['ipoCalendar'])
     finally:
