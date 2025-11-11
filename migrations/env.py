@@ -6,8 +6,8 @@ from sqlalchemy import pool
 from alembic import context
 
 # Import model
-from src.models import SQLModel
-from src.models import CompanyProfile
+from finhub_etl.models import SQLModel
+from finhub_etl.models import CompanyProfile
 
 load_dotenv()
 
