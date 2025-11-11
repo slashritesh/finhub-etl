@@ -1,7 +1,7 @@
 """Handler to Model mapping configurations for testing and ETL operations."""
 from datetime import datetime, timedelta
 
-from src.config.handlers import (
+from config.handlers import (
     get_stock_symbols,
     get_company_profile,
     get_company_profile2,
