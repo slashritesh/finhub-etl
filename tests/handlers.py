@@ -196,7 +196,9 @@ async def run_tests():
         results.append(result)
 
         if result["status"] == "PASS":
-            count_info = f" ({result['count']} records)" if result['count'] != "N/A" else ""
+            count_info = (
+                f" ({result['count']} records)" if result["count"] != "N/A" else ""
+            )
             print(f"[PASS]{count_info}")
         else:
             print(f"[FAIL]")
@@ -231,4 +233,8 @@ async def main():
 
 
 if __name__ == "__main__":
+    import warnings
+
+    # Suppress aiomysql event loop warnings
+    warnings.filterwarnings("ignore", message=".*Event loop is closed.*")
     asyncio.run(main())

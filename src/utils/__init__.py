@@ -8,6 +8,7 @@ from .etl import (
     transform_peers_response,
     transform_estimates_response,
 )
+from .csv_loader import load_matched_stocks_csv, clear_matched_stocks_table
 
 
 __all__ = [
@@ -23,5 +24,7 @@ __all__ = [
     "transform_candles_response",
     "transform_peers_response",
     "transform_estimates_response",
-   
+    # CSV loader functions
+    "load_matched_stocks_csv",
+    "clear_matched_stocks_table",
 ]

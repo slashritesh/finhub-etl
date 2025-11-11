@@ -16,5 +16,3 @@ async def get_session():
         yield session
 
 
-
- 

@@ -3,6 +3,9 @@ from sqlmodel import SQLModel
 # Stock Symbols
 from .symbols import StockSymbol
 
+# Matched Stocks
+from .matched_stock import MatchedStock
+
 # Company Profile Models
 from .company_profile import CompanyProfile, CompanyProfile2
 
@@ -55,6 +58,8 @@ __all__ = [
     "SQLModel",
     # Stock Symbols
     "StockSymbol",
+    # Matched Stocks
+    "MatchedStock",
     # Company Profile
     "CompanyProfile",
     "CompanyProfile2",
