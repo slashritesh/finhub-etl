@@ -10,9 +10,7 @@ class CompanyOwnership(SQLModel, table=True):
     name: str = Field(primary_key=True)
     change: Optional[float] = None
     filing_date: Optional[str] = Field(default=None, alias="filingDate")
-    portfolio_percent: Optional[float] = Field(default=None, alias="portfolioPercent")
     share: Optional[int] = None
-    value: Optional[float] = None
 
 
 class FundOwnership(SQLModel, table=True):

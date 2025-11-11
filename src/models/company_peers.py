@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import JSON, Column, SQLModel, Field
 
 
 class CompanyPeer(SQLModel, table=True):
@@ -6,4 +6,4 @@ class CompanyPeer(SQLModel, table=True):
     __tablename__ = "company_peers"
 
     symbol: str = Field(primary_key=True, index=True)
-    peer_symbol: str = Field(primary_key=True, alias="peerSymbol")
+    peers: list[str] = Field(default_factory=list, sa_column=Column(JSON))

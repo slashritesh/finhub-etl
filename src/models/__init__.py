@@ -53,6 +53,48 @@ from .ipo_calendar import IpoCalendar
 # Historical Market Cap
 from .historical_mcap import HistoricalMarketCap
 
+# Market Info
+from .market_info import MarketStatus, MarketHoliday
+
+# Executives
+from .executive import CompanyExecutive
+
+# General News
+from .general_news import GeneralNews
+
+# Insider Transactions
+from .insider_transaction import InsiderTransaction
+
+# Filings
+from .filing import CompanyFiling
+
+# Employee Count
+from .employee_count import HistoricalEmployeeCount
+
+# Analyst Data
+from .analyst import AnalystRecommendation, PriceTarget, UpgradeDowngrade
+
+# Estimates
+from .estimates import RevenueEstimate, EpsEstimate, EbitdaEstimate, EbitEstimate
+
+# Earnings
+from .earnings import EarningsData, EarningsCalendar
+
+# Quotes
+from .quote import RealtimeQuote
+
+# Candlestick
+from .candle import CandlestickData
+
+# Stock Splits
+from .stock_split import StockSplit
+
+# Technical Indicators
+from .technical_indicator import TechnicalIndicator
+
+# Earnings Quality
+from .earnings_quality import EarningsQualityScore
+
 
 __all__ = [
     "SQLModel",
@@ -90,4 +132,39 @@ __all__ = [
     "IpoCalendar",
     # Historical Market Cap
     "HistoricalMarketCap",
+    # Market Info
+    "MarketStatus",
+    "MarketHoliday",
+    # Executives
+    "CompanyExecutive",
+    # General News
+    "GeneralNews",
+    # Insider Transactions
+    "InsiderTransaction",
+    # Filings
+    "CompanyFiling",
+    # Employee Count
+    "HistoricalEmployeeCount",
+    # Analyst Data
+    "AnalystRecommendation",
+    "PriceTarget",
+    "UpgradeDowngrade",
+    # Estimates
+    "RevenueEstimate",
+    "EpsEstimate",
+    "EbitdaEstimate",
+    "EbitEstimate",
+    # Earnings
+    "EarningsData",
+    "EarningsCalendar",
+    # Quotes
+    "RealtimeQuote",
+    # Candlestick
+    "CandlestickData",
+    # Stock Splits
+    "StockSplit",
+    # Technical Indicators
+    "TechnicalIndicator",
+    # Earnings Quality
+    "EarningsQualityScore",
 ]

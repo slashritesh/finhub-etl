@@ -1,5 +1,5 @@
 from typing import Optional
-from sqlmodel import SQLModel, Field
+from sqlmodel import Column, SQLModel, Field, Text
 
 
 class CompanyProfile(SQLModel, table=True):
@@ -20,7 +20,7 @@ class CompanyProfile(SQLModel, table=True):
     naics_national_industry: Optional[str] = Field(default=None, alias="naicsNationalIndustry")
     naics_sector: Optional[str] = Field(default=None, alias="naicsSector")
     naics_subsector: Optional[str] = Field(default=None, alias="naicsSubsector")
-    description: Optional[str] = None
+    description: Optional[str] = Field(default=None, sa_column=Column(Text))
     exchange: Optional[str] = None
     ipo: Optional[str] = None
     market_capitalization: Optional[float] = Field(default=None, alias="marketCapitalization")

@@ -9,6 +9,7 @@ from .etl import (
     transform_estimates_response,
 )
 from .csv_loader import load_matched_stocks_csv, clear_matched_stocks_table
+from .mappings import HANDLER_MODEL_TESTS, HANDLER_MODEL_DICT
 
 
 __all__ = [
@@ -27,4 +28,7 @@ __all__ = [
     # CSV loader functions
     "load_matched_stocks_csv",
     "clear_matched_stocks_table",
+    # Mapping configurations
+    "HANDLER_MODEL_TESTS",
+    "HANDLER_MODEL_DICT",
 ]

@@ -10,7 +10,7 @@
   { "endpoint": "/company-news", "label": "Company Specific News" },
   { "endpoint": "/press-releases2", "label": "Company Press Releases" },
   { "endpoint": "/stock/peers", "label": "Company Peers" },
-  { "endpoint": "/stock/metric", "label": "Company Financial Metrics" },
+  { "endpoint": "/stock/metric", "label": "Company Basic Financials" },
   { "endpoint": "/stock/ownership", "label": "Shareholder Ownership" },
   { "endpoint": "/stock/fund-ownership", "label": "Fund Ownership" },
   { "endpoint": "/institutional/profile", "label": "Institutional Profile" },
