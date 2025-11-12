@@ -197,8 +197,8 @@ HANDLER_MODEL_DICT = {
         "endpoint": "/stock/historical-market-cap",
         "params": {
             "symbol": "AAPL",
-            "from_date": "",
-            "to_date": "",
+            "from_date": "2023-01-01", 
+            "to_date": "2024-01-01", 
         },
     },
     # Earnings Handlers

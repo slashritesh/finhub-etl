@@ -192,27 +192,36 @@ async def get_price_metrics(
 
 async def get_historical_market_cap(
     symbol: str,
-    from_date: Optional[str] = None,
-    to_date: Optional[str] = None
-) -> Dict[str, Any]:
-    """Get historical market capitalization data.
-
-    Endpoint: /stock/historical-market-cap
-
-    Args:
-        symbol: Stock symbol
-        from_date: Start date (YYYY-MM-DD)
-        to_date: End date (YYYY-MM-DD)
-
-    Returns:
-        Historical market cap data
+    from_date: str, # Changed to be required
+    to_date: str    # Changed to be required
+) -> List[Dict[str, Any]]:  # <-- Return type is a List
     """
-    params = {"symbol": symbol}
-    if from_date:
-        params["from"] = from_date
-    if to_date:
-        params["to"] = to_date
-    return await api_client.get("/stock/historical-market-cap", params=params)
+    Get historical market cap data and formats it for storage.
+    """
+    # 1. Fetch the raw data from the API with the required date params
+    raw_response = await api_client.get(
+        "/stock/historical-market-cap",
+        params={"symbol": symbol, "from": from_date, "to": to_date}
+    )
+
+    # 2. Handle empty or malformed responses
+    if not raw_response or "data" not in raw_response:
+        return []
+
+    # 3. Extract the list of records
+    records_list = raw_response["data"]
+    
+    # 4. Process each record to match the model's expectations
+    processed_records = []
+    for record in records_list:
+        processed_records.append({
+            "symbol": symbol,  # <-- Inject the symbol
+            "date": record.get("atDate"),  # <-- Rename "atDate" to "date"
+            "market_cap": record.get("marketCapitalization"), # <-- Rename "marketCapitalization"
+        })
+
+    # 5. Return the clean, flat list of dictionaries
+    return processed_records
 
 
 __all__ = [
