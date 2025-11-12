@@ -5,6 +5,9 @@ from finhub_etl.utils.mappings import HANDLER_MODEL_DICT
 
 async def test_handler(key: str, **kwargs):
     """Test a handler and log if it's working."""
+   
+    print(f"Testing: {key}")
+    print(f"{'='*60}")
 
     try:
         # Get handler info
@@ -16,9 +19,14 @@ async def test_handler(key: str, **kwargs):
 
         # Get the handler function
         handler_func = handler_info["handler"]
+        
+
+       
+        # Call the handler
         result = await handler_func(**kwargs)
 
-        print(f"📊 Handler Name : {key}")
+        # Log success
+        print("\n✅ SUCCESS: Handler responded")
         print(f"📊 Response type: {type(result).__name__}")
 
         # Pretty print result (truncated)
@@ -37,16 +45,21 @@ async def test_handler(key: str, **kwargs):
 
 async def main():
     # Test configuration
-    TEST_KEY = "stock_split"  # Handler key from mappings
+    TEST_KEY = "recommendation_trends"  # Handler key from mappings
     TEST_PARAMS = {
-        "symbol": "AAPL" , # Test symbol
-        "from" : "",
-        "to" : ""
+        "symbol": "AAPL"  # Test symbol
     }
 
-    result = await test_handler(TEST_KEY, **TEST_PARAMS)
+    # Run test
+    success = await test_handler(TEST_KEY, **TEST_PARAMS)
 
-    
+    # Summary
+    print(f"\n{'='*60}")
+    if success:
+        print("✅ Test completed successfully")
+    else:
+        print("❌ Test failed")
+    print(f"{'='*60}\n")
 
 
 if __name__ == "__main__":
