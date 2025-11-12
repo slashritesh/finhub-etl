@@ -10,22 +10,29 @@ from finhub_etl.config.finhub import api_client
 async def get_basic_financials(
     symbol: str,
     metric: Optional[str] = "all"
-) -> Dict[str, Any]:
-    """Get company basic financials such as margin, P/E ratio, 52-week high/low etc.
-
-    Endpoint: /stock/metric
-
-    Args:
-        symbol: Stock symbol
-        metric: Metric type or 'all' (default: 'all')
-
-    Returns:
-        Basic financial metrics
+) -> Dict[str, Any]: # <-- Returns a single, clean dictionary
     """
-    return await api_client.get(
+    Get basic financials and formats the response for storage.
+    """
+    # 1. Fetch the raw, complex response
+    raw_response = await api_client.get(
         "/stock/metric",
         params={"symbol": symbol, "metric": metric}
     )
+
+    # 2. Handle empty or malformed responses
+    if not raw_response or "metric" not in raw_response:
+        return {}
+
+    # 3. Extract the main dictionary of metrics. This is our base.
+    financial_data = raw_response["metric"]
+
+    # 4. Add the top-level symbol and metricType to the dictionary
+    financial_data["symbol"] = raw_response.get("symbol")
+    financial_data["metricType"] = raw_response.get("metricType")
+
+    # 5. Return the final, flattened dictionary ready for the model
+    return financial_data
 
 
 async def get_financials(

@@ -33,19 +33,9 @@ async def get_earnings_calendar(
     to_date: Optional[str] = None,
     symbol: Optional[str] = None,
     international: Optional[bool] = False
-) -> Dict[str, Any]:
-    """Get earnings calendar for specified date range.
-
-    Endpoint: /calendar/earnings
-
-    Args:
-        from_date: Start date (YYYY-MM-DD)
-        to_date: End date (YYYY-MM-DD)
-        symbol: Filter by symbol (optional)
-        international: Include international markets (default: False)
-
-    Returns:
-        Earnings calendar data
+) -> List[Dict[str, Any]]:  # <-- The return type is now a List
+    """
+    Get earnings calendar and formats the response for storage.
     """
     params = {}
     if from_date:
@@ -56,7 +46,17 @@ async def get_earnings_calendar(
         params["symbol"] = symbol
     if international:
         params["international"] = international
-    return await api_client.get("/calendar/earnings", params=params)
+        
+    # 1. Fetch the raw, nested response
+    raw_response = await api_client.get("/calendar/earnings", params=params)
+
+    # 2. Handle empty or malformed responses
+    if not raw_response or "earningsCalendar" not in raw_response:
+        return []
+
+    # 3. Extract and return the clean list of earnings data.
+    #    No other processing is needed as the symbol is already in each record.
+    return raw_response["earningsCalendar"]
 
 
 __all__ = [

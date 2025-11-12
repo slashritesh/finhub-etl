@@ -216,10 +216,10 @@ HANDLER_MODEL_DICT = {
         "model": EarningsCalendar,
         "endpoint": "/calendar/earnings",
         "params": {
-            "from_date": "",
-            "to_date": "",
-            "symbol": "",
-            "international": False,
+        "from_date": "2024-01-01", 
+        "to_date": "2024-03-31",     
+        "symbol": "AAPL",            
+        "international": False,
         },
     },
     # Financials Handlers

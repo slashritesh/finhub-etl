@@ -5,18 +5,21 @@ from sqlmodel import SQLModel, Field
 class BasicFinancials(SQLModel, table=True):
     """Basic Financials - /stock/metric"""
     __tablename__ = "basic_financials"
+    __table_args__ = {"extend_existing": True}
 
+    # Composite Primary Key
     symbol: str = Field(primary_key=True)
     metric_type: str = Field(primary_key=True, alias="metricType")
 
-    # Common metrics (stored as JSON in reality, but here we'll store key metrics)
+    # All metrics from the 'metric' object
     ten_day_avg_trading_volume: Optional[float] = Field(default=None, alias="10DayAverageTradingVolume")
     fifty_two_week_high: Optional[float] = Field(default=None, alias="52WeekHigh")
     fifty_two_week_low: Optional[float] = Field(default=None, alias="52WeekLow")
-    beta: Optional[float] = None
+    fifty_two_week_low_date: Optional[str] = Field(default=None, alias="52WeekLowDate")
+    fifty_two_week_price_return_daily: Optional[float] = Field(default=None, alias="52WeekPriceReturnDaily")
+    beta: Optional[float] = Field(default=None, alias="beta")
+
     market_capitalization: Optional[float] = Field(default=None, alias="marketCapitalization")
-    pe_ratio: Optional[float] = Field(default=None, alias="peBasicExclExtraTTM")
-    eps: Optional[float] = Field(default=None, alias="epsBasicExclExtraItemsTTM")
 
 class CompanyFinancials(SQLModel, table=True):
     """Company Financials - /stock/financials"""
