@@ -38,15 +38,24 @@ async def test_handler(key: str, **kwargs):
 async def main():
     # Test configuration
     TEST_KEY = "stock_split"  # Handler key from mappings
-    TEST_PARAMS = {
-        "symbol": "AAPL" , # Test symbol
-        "from" : "",
-        "to" : ""
-    }
+
+    # Get params from mappings
+    handler_info = HANDLER_MODEL_DICT.get(TEST_KEY)
+    if not handler_info:
+        print(f"❌ Handler key '{TEST_KEY}' not found in mappings")
+        return
+
+    # Use params from mappings
+    TEST_PARAMS = handler_info.get("params", {})
+
+    print(f"🔧 Testing: {TEST_KEY}")
+    print(f"📋 Endpoint: {handler_info.get('endpoint', 'N/A')}")
+    print(f"📦 Model: {handler_info.get('model', 'N/A').__name__}")
+    print(f"⚙️  Params: {TEST_PARAMS}\n")
 
     result = await test_handler(TEST_KEY, **TEST_PARAMS)
 
-    
+
 
 
 if __name__ == "__main__":
