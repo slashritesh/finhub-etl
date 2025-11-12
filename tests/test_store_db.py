@@ -17,7 +17,8 @@ async def main():
     # KEY = "company_executive"
     # KEY = "historical_employee_count"
     # KEY = "company_filing"
-    Key = "price_metrics"
+    # KEY = "price_metrics"
+    KEY = "historical_market_cap"
     handler = HANDLER_MODEL_DICT[KEY]
     print(handler)
 

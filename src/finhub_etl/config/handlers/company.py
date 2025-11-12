@@ -166,21 +166,28 @@ async def get_price_metrics(
     symbol: str,
     date: Optional[str] = None
 ) -> Dict[str, Any]:
-    """Get stock price metrics (intraday and period metrics).
-
-    Endpoint: /stock/price-metric
-
-    Args:
-        symbol: Stock symbol
-        date: Date in YYYY-MM-DD format (optional, defaults to current)
-
-    Returns:
-        Price metrics including 52-week high/low, beta, moving averages, etc.
+    """
+    Get stock price metrics and formats the response for storage.
     """
     params = {"symbol": symbol}
     if date:
         params["date"] = date
-    return await api_client.get("/stock/price-metric", params=params)
+
+    # 1. Fetch the raw, nested data
+    raw_response = await api_client.get("/stock/price-metric", params=params)
+
+    # 2. Handle empty or malformed responses
+    if not raw_response or "data" not in raw_response:
+        return {}
+
+    # 3. Extract the dictionary of metrics from the 'data' key
+    metrics_data = raw_response["data"]
+
+    # 4. Add the symbol to that dictionary
+    metrics_data["symbol"] = symbol
+
+    # 5. Return the single, clean dictionary
+    return metrics_data
 
 
 async def get_historical_market_cap(
