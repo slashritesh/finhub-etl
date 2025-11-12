@@ -4,7 +4,7 @@ from sqlmodel import SQLModel, Field
 
 class AnalystRecommendation(SQLModel, table=True):
     """Analyst Recommendations - /stock/recommendation"""
-    __tablename__ = "analyst_recommendations"
+    __tablename__ = "recommendations_trends"
 
     symbol: str = Field(primary_key=True, index=True)
     period: str = Field(primary_key=True)

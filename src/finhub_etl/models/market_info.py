@@ -13,12 +13,12 @@ class MarketStatus(SQLModel, table=True):
     holiday: Optional[str] = None
 
 
+
 class MarketHoliday(SQLModel, table=True):
     """Market Holidays - /stock/market-holiday"""
     __tablename__ = "market_holidays"
-
     exchange: str = Field(primary_key=True, index=True)
-    date: str = Field(primary_key=True)
-    holiday_name: Optional[str] = Field(default=None, alias="holidayName")
-    event: Optional[str] = None
-    hours: Optional[str] = None
+    date: str = Field(primary_key=True, alias="atDate")
+    event_name: str = Field(alias="eventName")
+    trading_hour: Optional[str] = Field(default=None, alias="tradingHour")
+    timezone: Optional[str] = None

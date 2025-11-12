@@ -8,7 +8,7 @@ class InsiderTransaction(SQLModel, table=True):
 
     symbol: str = Field(primary_key=True, index=True)
     name: str = Field(primary_key=True)
-    filing_date: str = Field(primary_key=True, alias="filingDate")
+    filing_date: str = Field(alias="filingDate")
     transaction_date: str = Field(primary_key=True, alias="transactionDate")
 
     share: Optional[float] = None

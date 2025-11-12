@@ -7,7 +7,7 @@ from alembic import context
 
 # Import model
 from finhub_etl.models import SQLModel
-from finhub_etl.models import CompanyProfile
+from finhub_etl.models import *
 
 load_dotenv()
 

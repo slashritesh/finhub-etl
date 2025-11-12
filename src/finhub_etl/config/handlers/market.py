@@ -5,6 +5,7 @@ Reference: https://finnhub.io/docs/api
 
 from typing import Dict, Any, Optional, List
 from finhub_etl.config.finhub import api_client
+from finhub_etl.models.market_info import MarketHoliday
 
 
 async def get_symbol_lookup(query: str) -> Dict[str, Any]:
@@ -67,8 +68,9 @@ async def get_market_status(exchange: str) -> Dict[str, Any]:
     )
 
 
-async def get_market_holiday(exchange: str) -> Dict[str, Any]:
-    """Get market holiday and trading hours data.
+async def get_market_holiday(exchange: str) -> List[Dict[str, Any]]:
+    """
+    Fetch and transform market holiday data for a given exchange.
 
     Endpoint: /stock/market-holiday
 
@@ -76,13 +78,29 @@ async def get_market_holiday(exchange: str) -> Dict[str, Any]:
         exchange: Exchange code (e.g., 'US')
 
     Returns:
-        Holiday calendar and trading hours data
+        List[Dict[str, Any]] records (JSON ready for DB insertion)
     """
-    return await api_client.get(
+    response: Dict[str, Any] = await api_client.get(
         "/stock/market-holiday",
         params={"exchange": exchange}
     )
 
+    if not response or "data" not in response:
+        return []
+
+    # Transform API data into JSON objects
+    records = [
+        {
+            "exchange": response.get("exchange", exchange),
+            "timezone": response.get("timezone", ""),
+            "date": item.get("atDate"),
+            "event_name": item.get("eventName"),
+            "trading_hour": item.get("tradingHour", "")
+        }
+        for item in response["data"]
+    ]
+
+    return records
 
 async def get_quote(symbol: str) -> Dict[str, Any]:
     """Get real-time quote data for US stocks.
