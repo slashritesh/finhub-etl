@@ -7,32 +7,43 @@ from typing import Optional, List, Dict, Any
 from finhub_etl.config.finhub import api_client
 
 
-async def get_company_profile(symbol: str) -> Dict[str, Any]:
-    """Get general information of a company (v1).
-
-    Endpoint: /stock/profile
-
-    Args:
-        symbol: Stock symbol (e.g., 'AAPL')
-
-    Returns:
-        Company profile data (v1)
+async def get_company_profile(
+    symbol: str,
+    isin: Optional[str] = None,
+    cusip: Optional[str] = None
+) -> Dict[str, Any]:
     """
-    return await api_client.get("/stock/profile", params={"symbol": symbol})
-
-
-async def get_company_profile2(symbol: str) -> Dict[str, Any]:
-    """Get general information of a company (v2 - recommended).
-
-    Endpoint: /stock/profile2
-
-    Args:
-        symbol: Stock symbol (e.g., 'AAPL')
-
-    Returns:
-        Company profile data (v2)
+    Get general information of a company (v1).
+    'symbol' is required. 'isin' and 'cusip' are optional.
     """
-    return await api_client.get("/stock/profile2", params={"symbol": symbol})
+    # Create a dictionary of all possible parameters
+    all_params = {"symbol": symbol, "isin": isin, "cusip": cusip}
+
+    # Filter out any optional parameters that are None or empty strings
+    active_params = {key: value for key, value in all_params.items() if value}
+
+    # Make the API call with the active parameters
+    return await api_client.get("/stock/profile", params=active_params)
+
+
+
+async def get_company_profile2(
+    symbol: str,
+    isin: Optional[str] = None,
+    cusip: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Get general information of a company (v2 - recommended).
+    'symbol' is required. 'isin' and 'cusip' are optional.
+    """
+    # Create a dictionary of all possible parameters
+    all_params = {"symbol": symbol, "isin": isin, "cusip": cusip}
+
+    # Filter out any optional parameters that are None or empty strings
+    active_params = {key: value for key, value in all_params.items() if value}
+
+    # Make the API call with the active parameters
+    return await api_client.get("/stock/profile2", params=active_params)
 
 
 async def get_company_peers(symbol: str) -> List[str]:

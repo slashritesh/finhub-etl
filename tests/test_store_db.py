@@ -10,7 +10,9 @@ async def main():
     # KEY = "revenue_estimate"
     # KEY = "eps_estimate"
     # KEY = "ebitda_estimate"
-    KEY = "ebit_estimate"
+    # KEY = "ebit_estimate"
+    # KEY = "company_profile"
+    KEY = "company_profile2"
     handler = HANDLER_MODEL_DICT[KEY]
     print(handler)
 

@@ -34,6 +34,12 @@ class CompanyProfile(SQLModel, table=True):
     isin: Optional[str] = None
     lei: Optional[str] = None
     sedol: Optional[str] = None
+    
+    # ADDED a field for "currency" 
+    currency: Optional[str] = None
+    
+    #  ADDED a field for "finnhubIndustry"
+    finnhub_industry: Optional[str] = Field(default=None, alias="finnhubIndustry")
 
 
 class CompanyProfile2(SQLModel, table=True):

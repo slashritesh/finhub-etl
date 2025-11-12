@@ -56,8 +56,6 @@ class EbitdaEstimate(SQLModel, table=True):
 class EbitEstimate(SQLModel, table=True):
     """EBIT Estimate - /stock/ebit-estimate"""
     __tablename__ = "ebit_estimates"
-    # Add this to prevent future import errors
-    __table_args__ = {"extend_existing": True}
 
     symbol: str = Field(primary_key=True, index=True)
     period: str = Field(primary_key=True)

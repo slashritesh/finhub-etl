@@ -128,6 +128,8 @@ HANDLER_MODEL_DICT = {
         "endpoint": "/stock/profile",
         "params": {
             "symbol": "AAPL",
+            "isin": "",
+            "cusip": "",
         },
     },
     "company_profile2": {
@@ -136,6 +138,8 @@ HANDLER_MODEL_DICT = {
         "endpoint": "/stock/profile2",
         "params": {
             "symbol": "AAPL",
+            "isin": "",
+            "cusip": "",
         },
     },
     "company_peers": {
