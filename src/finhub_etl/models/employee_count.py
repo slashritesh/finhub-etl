@@ -7,8 +7,7 @@ class HistoricalEmployeeCount(SQLModel, table=True):
     __tablename__ = "historical_employee_count"
 
     symbol: str = Field(primary_key=True, index=True)
-    period_date: str = Field(primary_key=True, alias="periodDate")
+    period_date: str = Field(primary_key=True) 
 
-    employee_count: Optional[int] = Field(default=None, alias="employeeCount")
-    filing_date: Optional[str] = Field(default=None, alias="filingDate")
-    source: Optional[str] = None
+    # Data Fields
+    employee_count: Optional[int] = None 

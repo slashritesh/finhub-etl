@@ -12,7 +12,11 @@ async def main():
     # KEY = "ebitda_estimate"
     # KEY = "ebit_estimate"
     # KEY = "company_profile"
-    KEY = "company_profile2"
+    # KEY = "company_profile2"
+    # KEY = "company_peers"
+    # KEY = "company_executive"
+    # KEY = "historical_employee_count"
+    KEY = "company_filing"
     handler = HANDLER_MODEL_DICT[KEY]
     print(handler)
 

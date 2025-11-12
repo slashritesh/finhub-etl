@@ -46,49 +46,90 @@ async def get_company_profile2(
     return await api_client.get("/stock/profile2", params=active_params)
 
 
-async def get_company_peers(symbol: str) -> List[str]:
-    """Get company peers in the same country and GICS sub-industry.
+async def get_company_peers(
+    symbol: str,
+    grouping: Optional[str] = None
+) -> Dict[str, Any]: 
+    """
+    Get company peers and formats the response for database storage.
 
     Endpoint: /stock/peers
-
-    Args:
-        symbol: Stock symbol
-
-    Returns:
-        List of peer symbols
     """
-    return await api_client.get("/stock/peers", params={"symbol": symbol})
+    params: Dict[str, Any] = {"symbol": symbol}
+    if grouping:
+        params["grouping"] = grouping
+
+    # 1. Fetch the list of peer symbols from the API
+    peers_list = await api_client.get("/stock/peers", params=params)
+
+    # 2. Check if the API returned a valid list
+    if not isinstance(peers_list, list):
+        # Return an empty dict if the API response is not what we expect
+        return {}
+
+    # 3. CRITICAL STEP: Combine the original symbol and the peer list
+    return {
+        "symbol": symbol,
+        "peers": peers_list
+    }
 
 
-async def get_executive(symbol: str) -> Dict[str, Any]:
-    """Get company executive information.
+async def get_executive(symbol: str) -> List[Dict[str, Any]]:  # <-- Return type is now a List
+    """
+    Get company executive information and formats it for storage.
 
     Endpoint: /stock/executive
-
-    Args:
-        symbol: Stock symbol
-
-    Returns:
-        Executive compensation and information
     """
-    return await api_client.get("/stock/executive", params={"symbol": symbol})
+    # 1. Fetch the raw, nested data from the API
+    raw_response = await api_client.get("/stock/executive", params={"symbol": symbol})
+
+    # 2. Handle cases where the response is empty or malformed
+    if not raw_response or "executive" not in raw_response:
+        return []
+
+    # 3. Extract the list of executives
+    executive_list = raw_response["executive"]
+
+    # 4. CRITICAL STEP: Add the company symbol to each executive's record
+    for executive in executive_list:
+        executive["symbol"] = symbol
+
+    # 5. Return the clean, flat list
+    return executive_list
 
 
-async def get_historical_employee_count(symbol: str) -> Dict[str, Any]:
-    """Get historical employee count data.
-
-    Endpoint: /stock/historical-employee-count
-
-    Args:
-        symbol: Stock symbol
-
-    Returns:
-        Historical employee count data
+async def get_historical_employee_count(
+    symbol: str,
+    _from: str,  # Using _from because 'from' is a reserved keyword in Python
+    to: str
+) -> List[Dict[str, Any]]:  # <-- Return type is a List
     """
-    return await api_client.get(
+    Get historical employee count data and formats it for storage.
+    """
+    # 1. Fetch the raw data from the API with the required date params
+    raw_response = await api_client.get(
         "/stock/historical-employee-count",
-        params={"symbol": symbol}
+        params={"symbol": symbol, "from": _from, "to": to}
     )
+
+    # 2. Handle empty or malformed responses
+    if not raw_response or "data" not in raw_response:
+        return []
+
+    # 3. Extract the list of records
+    records_list = raw_response["data"]
+    
+    # 4. Process each record to match the model's expectations
+    processed_records = []
+    for record in records_list:
+        processed_records.append({
+            "symbol": symbol,  # <-- Inject the symbol
+            "period_date": record.get("atDate"),  # <-- Rename "atDate" to "period_date"
+            "employee_count": record.get("employee"), # <-- Rename "employee" to "employee_count"
+        })
+
+    # 5. Return the clean, flat list of dictionaries
+    return processed_records
 
 
 async def get_filings(

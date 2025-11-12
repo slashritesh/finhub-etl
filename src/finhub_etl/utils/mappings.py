@@ -148,6 +148,7 @@ HANDLER_MODEL_DICT = {
         "endpoint": "/stock/peers",
         "params": {
             "symbol": "AAPL",
+            "grouping": "industry",
         },
     },
     "company_executive": {
@@ -164,6 +165,8 @@ HANDLER_MODEL_DICT = {
         "endpoint": "/stock/historical-employee-count",
         "params": {
             "symbol": "AAPL",
+            "_from": "2020-01-01",
+            "to": "2024-01-01"
         },
     },
     "company_filing": {
