@@ -101,64 +101,91 @@ async def get_revenue_estimate(
 async def get_eps_estimate(
     symbol: str,
     freq: Optional[str] = "quarterly"
-) -> Dict[str, Any]:
+) -> List[Dict[str, Any]]:  # <-- Change return type to List
     """Get EPS (earnings per share) estimates.
 
-    Endpoint: /stock/eps-estimate
-
-    Args:
-        symbol: Stock symbol
-        freq: Frequency - 'annual' or 'quarterly' (default: 'quarterly')
-
-    Returns:
-        EPS estimates data
+    This handler transforms the raw API response into the flat list
+    format expected by the generic save function.
     """
-    return await api_client.get(
+    # 1. Fetch the raw data
+    raw_response = await api_client.get(
         "/stock/eps-estimate",
         params={"symbol": symbol, "freq": freq}
     )
+
+    # 2. Handle empty responses
+    if not raw_response or "data" not in raw_response:
+        return []
+
+    # 3. Extract the list of records
+    records_list = raw_response["data"]
+
+    # 4. Add the symbol to each record
+    for record in records_list:
+        record["symbol"] = symbol
+
+    # 5. Return the clean list
+    return records_list
 
 
 async def get_ebitda_estimate(
     symbol: str,
     freq: Optional[str] = "quarterly"
-) -> Dict[str, Any]:
+) -> List[Dict[str, Any]]:  # <-- Change return type to a List
     """Get EBITDA estimates.
 
-    Endpoint: /stock/ebitda-estimate
-
-    Args:
-        symbol: Stock symbol
-        freq: Frequency - 'annual' or 'quarterly' (default: 'quarterly')
-
-    Returns:
-        EBITDA estimates data
+    This handler transforms the raw API response into the flat list
+    format expected by the generic save function.
     """
-    return await api_client.get(
+    # 1. Fetch the raw data
+    raw_response = await api_client.get(
         "/stock/ebitda-estimate",
         params={"symbol": symbol, "freq": freq}
     )
+
+    # 2. Handle empty responses
+    if not raw_response or "data" not in raw_response:
+        return []
+
+    # 3. Extract the list of records
+    records_list = raw_response["data"]
+
+    # 4. Add the symbol to each record for the composite key
+    for record in records_list:
+        record["symbol"] = symbol
+
+    # 5. Return the clean, ready-to-save list
+    return records_list
 
 
 async def get_ebit_estimate(
     symbol: str,
     freq: Optional[str] = "quarterly"
-) -> Dict[str, Any]:
+) -> List[Dict[str, Any]]:  # <-- Change return type to a List
     """Get EBIT estimates.
 
-    Endpoint: /stock/ebit-estimate
-
-    Args:
-        symbol: Stock symbol
-        freq: Frequency - 'annual' or 'quarterly' (default: 'quarterly')
-
-    Returns:
-        EBIT estimates data
+    This handler transforms the raw API response into the flat list
+    format expected by the generic save function.
     """
-    return await api_client.get(
+    # 1. Fetch the raw data
+    raw_response = await api_client.get(
         "/stock/ebit-estimate",
         params={"symbol": symbol, "freq": freq}
     )
+
+    # 2. Handle empty responses
+    if not raw_response or "data" not in raw_response:
+        return []
+
+    # 3. Extract the list from the 'data' key
+    records_list = raw_response["data"]
+
+    # 4. Add the symbol to each record in the list
+    for record in records_list:
+        record["symbol"] = symbol
+
+    # 5. Return the clean list
+    return records_list
 
 
 __all__ = [

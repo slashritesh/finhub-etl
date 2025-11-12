@@ -30,6 +30,10 @@ class EpsEstimate(SQLModel, table=True):
     eps_high: Optional[float] = Field(default=None, alias="epsHigh")
     eps_low: Optional[float] = Field(default=None, alias="epsLow")
     number_analysts: Optional[int] = Field(default=None, alias="numberAnalysts")
+    
+    # Added fields
+    quarter: Optional[int] = None
+    year: Optional[int] = None
 
 
 class EbitdaEstimate(SQLModel, table=True):
@@ -43,11 +47,17 @@ class EbitdaEstimate(SQLModel, table=True):
     ebitda_high: Optional[float] = Field(default=None, alias="ebitdaHigh")
     ebitda_low: Optional[float] = Field(default=None, alias="ebitdaLow")
     number_analysts: Optional[int] = Field(default=None, alias="numberAnalysts")
+    
+    # Added fields
+    quarter: Optional[int] = None
+    year: Optional[int] = None
 
 
 class EbitEstimate(SQLModel, table=True):
     """EBIT Estimate - /stock/ebit-estimate"""
     __tablename__ = "ebit_estimates"
+    # Add this to prevent future import errors
+    __table_args__ = {"extend_existing": True}
 
     symbol: str = Field(primary_key=True, index=True)
     period: str = Field(primary_key=True)
@@ -56,3 +66,7 @@ class EbitEstimate(SQLModel, table=True):
     ebit_high: Optional[float] = Field(default=None, alias="ebitHigh")
     ebit_low: Optional[float] = Field(default=None, alias="ebitLow")
     number_analysts: Optional[int] = Field(default=None, alias="numberAnalysts")
+    
+    # Added fields
+    quarter: Optional[int] = None
+    year: Optional[int] = None
