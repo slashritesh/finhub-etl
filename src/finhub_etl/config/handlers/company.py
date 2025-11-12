@@ -133,32 +133,33 @@ async def get_historical_employee_count(
 
 
 async def get_filings(
-    symbol: str,
+    symbol: Optional[str] = None,
+    cik: Optional[str] = None,
+    accessNumber: Optional[str] = None,
     from_date: Optional[str] = None,
     to_date: Optional[str] = None,
     form: Optional[str] = None
 ) -> List[Dict[str, Any]]:
-    """Get SEC filings for a company.
+    """
+    Get SEC filings for a company.
 
     Endpoint: /stock/filings
-
-    Args:
-        symbol: Stock symbol
-        from_date: Start date (YYYY-MM-DD)
-        to_date: End date (YYYY-MM-DD)
-        form: Filter by form type (e.g., '10-K', '10-Q')
-
-    Returns:
-        List of SEC filings
     """
-    params = {"symbol": symbol}
-    if from_date:
-        params["from"] = from_date
-    if to_date:
-        params["to"] = to_date
-    if form:
-        params["form"] = form
-    return await api_client.get("/stock/filings", params=params)
+    # 1. Create a dictionary of all possible API parameters
+    all_params = {
+        "symbol": symbol,
+        "cik": cik,
+        "accessNumber": accessNumber,
+        "from": from_date,
+        "to": to_date,
+        "form": form,
+    }
+
+    # 2. Filter out any parameters that are None or empty strings
+    active_params = {key: value for key, value in all_params.items() if value}
+
+    # 3. Make the API call with only the provided parameters
+    return await api_client.get("/stock/filings", params=active_params)
 
 
 async def get_price_metrics(

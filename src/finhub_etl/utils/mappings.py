@@ -178,6 +178,8 @@ HANDLER_MODEL_DICT = {
             "from_date": "",
             "to_date": "",
             "form": "",
+            "cik": "",
+            "accessNumber": "",
         },
     },
     "price_metrics": {

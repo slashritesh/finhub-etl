@@ -16,7 +16,8 @@ async def main():
     # KEY = "company_peers"
     # KEY = "company_executive"
     # KEY = "historical_employee_count"
-    KEY = "company_filing"
+    # KEY = "company_filing"
+    Key = "price_metrics"
     handler = HANDLER_MODEL_DICT[KEY]
     print(handler)
 
