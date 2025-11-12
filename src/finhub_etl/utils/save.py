@@ -1,9 +1,8 @@
 import json
 from pathlib import Path
-from typing import Any, Union, List, Type, TypeVar
+from typing import Any, Union ,TypeVar
 from sqlmodel import SQLModel
-from sqlmodel.ext.asyncio.session import AsyncSession
-from database.core import engine
+
 
 T = TypeVar("T", bound=SQLModel)
 
@@ -35,41 +34,3 @@ def save_json(
 
     print(f"Data saved to {file_path}")
 
-
-async def save_to_db(
-    model: Type[T],
-    data: Union[dict, List[dict]],
-) -> Union[T, List[T]]:
-    """
-    Save data to database using SQLModel.
-
-    Args:
-        model: SQLModel class to instantiate
-        data: Dictionary or list of dictionaries to save
-
-    Returns:
-        Created model instance(s)
-
-    Example:
-        from src.models.company import CompanyProfile
-        company = await save_to_db(CompanyProfile, company_data)
-
-        # Batch insert
-        companies = await save_to_db(CompanyProfile, [data1, data2, data3])
-    """
-
-    async with AsyncSession(engine) as session:
-        if isinstance(data, list):
-            instances = [model(**item) for item in data]
-            session.add_all(instances)
-            await session.commit()
-            for instance in instances:
-                await session.refresh(instance)
-            return instances
-        else:
-            instance = model(**data)
-            session.add(instance)
-            await session.commit()
-            await session.refresh(instance)
-            session.close()
-            return instance
