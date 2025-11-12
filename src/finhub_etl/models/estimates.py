@@ -13,6 +13,10 @@ class RevenueEstimate(SQLModel, table=True):
     revenue_high: Optional[float] = Field(default=None, alias="revenueHigh")
     revenue_low: Optional[float] = Field(default=None, alias="revenueLow")
     number_analysts: Optional[int] = Field(default=None, alias="numberAnalysts")
+    
+    # fix
+    quarter: Optional[int] = None
+    year: Optional[int] = None
 
 
 class EpsEstimate(SQLModel, table=True):

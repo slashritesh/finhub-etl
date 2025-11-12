@@ -20,9 +20,12 @@ class PriceTarget(SQLModel, table=True):
     """Price Target - /stock/price-target"""
     __tablename__ = "price_targets"
 
+    # Primary key fields
     symbol: str = Field(primary_key=True, index=True)
     last_updated: str = Field(primary_key=True, alias="lastUpdated")
 
+    # Data fields
+    number_analysts: Optional[int] = Field(default=None, alias="numberAnalysts")
     target_high: Optional[float] = Field(default=None, alias="targetHigh")
     target_low: Optional[float] = Field(default=None, alias="targetLow")
     target_mean: Optional[float] = Field(default=None, alias="targetMean")
