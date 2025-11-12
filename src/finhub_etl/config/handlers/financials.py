@@ -3,7 +3,7 @@
 Reference: https://finnhub.io/docs/api
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, List, Optional
 from finhub_etl.config.finhub import api_client
 
 
@@ -38,24 +38,39 @@ async def get_basic_financials(
 async def get_financials(
     symbol: str,
     statement: str,
-    freq: Optional[str] = "annual"
-) -> Dict[str, Any]:
-    """Get standardized balance sheet, income statement and cash flow.
-
-    Endpoint: /stock/financials
-
-    Args:
-        symbol: Stock symbol
-        statement: Statement type ('bs' for balance sheet, 'ic' for income statement, 'cf' for cash flow)
-        freq: Frequency - 'annual' or 'quarterly' (default: 'annual')
-
-    Returns:
-        Standardized financial statements
+    freq: str, # Changed to be required, as the API needs it
+    preliminary: Optional[bool] = False # Added optional param from docs
+) -> List[Dict[str, Any]]: # <-- The return type MUST be a List
     """
-    return await api_client.get(
-        "/stock/financials",
-        params={"symbol": symbol, "statement": statement, "freq": freq}
-    )
+    Get standardized financials and formats the response for the CompanyFinancials model.
+    """
+    params = {
+        "symbol": symbol,
+        "statement": statement,
+        "freq": freq,
+        "preliminary": preliminary,
+    }
+    # Filter out any optional params that are not set
+    active_params = {k: v for k, v in params.items() if v}
+
+    # 1. Fetch the raw, nested response from the API
+    raw_response = await api_client.get("/stock/financials", params=active_params)
+
+    # 2. Handle empty or malformed responses
+    if not raw_response or "financials" not in raw_response:
+        return []
+
+    # 3. Extract the list of financial records
+    financials_list = raw_response["financials"]
+
+    # 4. CRITICAL: Inject the necessary context into each record to match the model
+    for record in financials_list:
+        record["symbol"] = symbol
+        record["frequency"] = freq          # Add the frequency
+        record["statement_type"] = statement  # Add the statement type
+
+    # 5. Return the clean, flat list ready for the database
+    return financials_list
 
 
 async def get_financials_reported(

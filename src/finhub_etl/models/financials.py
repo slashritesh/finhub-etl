@@ -25,17 +25,19 @@ class CompanyFinancials(SQLModel, table=True):
     """Company Financials - /stock/financials"""
     __tablename__ = "company_financials"
 
+    # Composite Primary Key
     symbol: str = Field(primary_key=True, max_length=20, index=True)
-    statement_type: str = Field(primary_key=True, max_length=50, alias="statementType")  # income, balance_sheet, cash_flow
-    period: str = Field(primary_key=True, max_length=20)  # YYYY-MM-DD or similar
-    frequency: str = Field(primary_key=True, max_length=10)  # annual or quarterly
+    statement_type: str = Field(primary_key=True, max_length=50) # Alias removed, handler provides correct key
+    period: str = Field(primary_key=True, max_length=20)
+    frequency: str = Field(primary_key=True, max_length=10)
 
-    # Financial data
+    # Financial data - all are Optional because a row will only contain data for one statement type
     revenue: Optional[float] = None
     net_income: Optional[float] = Field(default=None, alias="netIncome")
     total_assets: Optional[float] = Field(default=None, alias="totalAssets")
     total_liabilities: Optional[float] = Field(default=None, alias="totalLiabilities")
-    cash_flow: Optional[float] = Field(default=None, alias="cashFlow")
+    # This field is not in the income statement/balance sheet response, but is here for cash flow
+    cash_flow: Optional[float] = None
 
 class ReportedFinancials(SQLModel, table=True):
     """Reported Financials - /stock/financials-reported"""
