@@ -3,7 +3,7 @@
 Reference: https://finnhub.io/docs/api
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, List, Optional
 from finhub_etl.config.finhub import api_client
 
 
@@ -69,22 +69,33 @@ async def get_upgrade_downgrade(
 async def get_revenue_estimate(
     symbol: str,
     freq: Optional[str] = "quarterly"
-) -> Dict[str, Any]:
-    """Get revenue estimates.
-
-    Endpoint: /stock/revenue-estimate
-
-    Args:
-        symbol: Stock symbol
-        freq: Frequency - 'annual' or 'quarterly' (default: 'quarterly')
-
-    Returns:
-        Revenue estimates data
+) -> List[Dict[str, Any]]:  # <-- IMPORTANT: Return type is now a List
     """
-    return await api_client.get(
+    Get revenue estimates.
+
+    This handler transforms the raw API response into the flat list
+    format expected by the generic save function.
+    """
+    # 1. Fetch the raw data from the API client
+    raw_response = await api_client.get(
         "/stock/revenue-estimate",
         params={"symbol": symbol, "freq": freq}
     )
+
+    # 2. Check for empty or invalid responses
+    if not raw_response or "data" not in raw_response:
+        return []
+
+    # 3. Extract the list of records from the 'data' key
+    records_list = raw_response["data"]
+
+    # 4. Enrich each record with the symbol (for the composite primary key)
+    #    This is the most important step.
+    for record in records_list:
+        record["symbol"] = symbol
+
+    # 5. Return the clean, flat list
+    return records_list
 
 
 async def get_eps_estimate(

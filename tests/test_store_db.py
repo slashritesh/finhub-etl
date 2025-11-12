@@ -7,7 +7,7 @@ from finhub_etl.utils.mappings import HANDLER_MODEL_DICT
 async def main():
     # KEY = "recommendation_trends"
     # KEY = "market_holiday"
-    KEY = "ebit_estimate"
+    KEY = "eps_estimate"
     handler = HANDLER_MODEL_DICT[KEY]
     print(handler)
 
