@@ -20,12 +20,23 @@ async def get_ipo_calendar(
         to_date: End date (YYYY-MM-DD)
 
     Returns:
-        IPO calendar data with upcoming and recent IPOs
+        IPO calendar data with upcoming and recent IPOs (filtered)
     """
-    return await api_client.get(
+    data = await api_client.get(
         "/calendar/ipo",
         params={"from": from_date, "to": to_date}
     )
+
+    ipo_data = data.get("ipoCalendar", [])
+
+    # Filter out entries with null date or symbol
+    filtered = [
+        item for item in ipo_data
+        if item.get("date") and item.get("symbol")
+    ]
+
+    return filtered
+
 
 
 async def get_dividends(

@@ -163,11 +163,7 @@ HANDLER_MODEL_DICT = {
         "handler": company.get_historical_employee_count,
         "model": HistoricalEmployeeCount,
         "endpoint": "/stock/historical-employee-count",
-        "params": {
-            "symbol": "AAPL",
-            "_from": "2020-01-01",
-            "to": "2024-01-01"
-        },
+        "params": {"symbol": "AAPL", "_from": "2020-01-01", "to": "2024-01-01"},
     },
     "company_filing": {
         "handler": company.get_filings,
@@ -197,8 +193,8 @@ HANDLER_MODEL_DICT = {
         "endpoint": "/stock/historical-market-cap",
         "params": {
             "symbol": "AAPL",
-            "from_date": "2023-01-01", 
-            "to_date": "2024-01-01", 
+            "from_date": "2023-01-01",
+            "to_date": "2024-01-01",
         },
     },
     # Earnings Handlers
@@ -216,10 +212,10 @@ HANDLER_MODEL_DICT = {
         "model": EarningsCalendar,
         "endpoint": "/calendar/earnings",
         "params": {
-        "from_date": "2024-01-01", 
-        "to_date": "2024-03-31",     
-        "symbol": "AAPL",            
-        "international": False,
+            "from_date": "2024-01-01",
+            "to_date": "2024-03-31",
+            "symbol": "AAPL",
+            "international": False,
         },
     },
     # Financials Handlers
@@ -256,7 +252,7 @@ HANDLER_MODEL_DICT = {
         "model": SectorMetrics,
         "endpoint": "/sector/metrics",
         "params": {
-            "region": "us",
+            "region": "NA",
         },
     },
     "earnings_quality_score": {

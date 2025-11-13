@@ -113,7 +113,9 @@ async def get_quote(symbol: str) -> Dict[str, Any]:
     Returns:
         Real-time quote (current, high, low, open, previous close, change, percent change)
     """
-    return await api_client.get("/quote", params={"symbol": symbol})
+    data = await api_client.get("/quote", params={"symbol": symbol})
+    data["symbol"] = symbol
+    return data
 
 
 async def get_candles(
@@ -135,7 +137,7 @@ async def get_candles(
     Returns:
         OHLCV data arrays (open, high, low, close, volume, timestamp)
     """
-    return await api_client.get(
+    data = await api_client.get(
         "/stock/candle",
         params={
             "symbol": symbol,
@@ -144,6 +146,8 @@ async def get_candles(
             "to": to_timestamp
         }
     )
+    data["symbol"] = symbol
+    return data
 
 
 async def get_technical_indicators(

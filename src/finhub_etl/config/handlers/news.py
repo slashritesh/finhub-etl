@@ -45,10 +45,16 @@ async def get_company_news(
     Returns:
         List of company news articles
     """
-    return await api_client.get(
+    data =  await api_client.get(
         "/company-news",
         params={"symbol": symbol, "from": from_date, "to": to_date}
     )
+
+    # Inject symbol into each news object
+    for item in data:
+        item["symbol"] = symbol
+
+    return data
 
 
 async def get_press_releases(
@@ -66,14 +72,23 @@ async def get_press_releases(
         to_date: End date (YYYY-MM-DD, optional)
 
     Returns:
-        List of press releases
+        List of press releases with converted date + symbol added
     """
     params = {"symbol": symbol}
     if from_date:
         params["from"] = from_date
     if to_date:
         params["to"] = to_date
-    return await api_client.get("/press-releases2", params=params)
+
+    data = await api_client.get("/press-releases2", params=params)
+    items = data.get("pressReleases", [])
+
+    for item in items:
+        # Ensure symbol exists
+        item["symbol"] = symbol
+        item["date"] = item.pop("datetime")
+    return items
+
 
 
 __all__ = [

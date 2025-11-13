@@ -93,6 +93,7 @@ async def get_revenue_estimate(
     #    This is the most important step.
     for record in records_list:
         record["symbol"] = symbol
+        record["freq"] = freq
 
     # 5. Return the clean, flat list
     return records_list
@@ -123,6 +124,7 @@ async def get_eps_estimate(
     # 4. Add the symbol to each record
     for record in records_list:
         record["symbol"] = symbol
+        record["freq"] = freq
 
     # 5. Return the clean list
     return records_list
@@ -153,6 +155,7 @@ async def get_ebitda_estimate(
     # 4. Add the symbol to each record for the composite key
     for record in records_list:
         record["symbol"] = symbol
+        record["freq"] = freq
 
     # 5. Return the clean, ready-to-save list
     return records_list
@@ -183,6 +186,7 @@ async def get_ebit_estimate(
     # 4. Add the symbol to each record in the list
     for record in records_list:
         record["symbol"] = symbol
+        record["freq"] = freq
 
     # 5. Return the clean list
     return records_list

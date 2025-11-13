@@ -12,6 +12,6 @@ class IpoCalendar(SQLModel, table=True):
     name: str
     exchange: Optional[str] = None
     number_of_shares: Optional[int] = Field(default=None, alias="numberOfShares")
-    price: Optional[float] = None
+    price: Optional[str] = None
     status: Optional[str] = None
     total_shares_value: Optional[float] = Field(default=None, alias="totalSharesValue")

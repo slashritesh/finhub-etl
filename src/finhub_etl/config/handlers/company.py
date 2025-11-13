@@ -152,7 +152,7 @@ async def get_filings(
         "accessNumber": accessNumber,
         "from": from_date,
         "to": to_date,
-        "form": form,
+        "form": form, 
     }
 
     # 2. Filter out any parameters that are None or empty strings

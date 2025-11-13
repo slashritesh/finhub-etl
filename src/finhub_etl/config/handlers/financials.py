@@ -94,21 +94,38 @@ async def get_financials_reported(
     )
 
 
-async def get_sector_metrics(region: str) -> Dict[str, Any]:
+async def get_sector_metrics(region: str) -> List[Dict[str, Any]]:
     """Get sector metrics including performance, valuation, and financial ratios.
 
     Endpoint: /sector/metrics
 
     Args:
-        region: Region code (e.g., 'us')
+        region: Region code (e.g., 'NA')
 
     Returns:
-        Sector performance metrics
+        List of sectors with metrics in the format:
+        {
+            "sector": str,
+            "region": str,
+            "metrics": dict
+        }
     """
-    return await api_client.get(
+    data = await api_client.get(
         "/sector/metrics",
         params={"region": region}
     )
+
+    sectors = data.get("data", [])
+
+    result = []
+    for item in sectors:
+        result.append({
+            "sector": item.get("sector"),
+            "region": region,
+            "metrics": item.get("metrics", {})
+        })
+
+    return result
 
 
 async def get_earnings_quality_score(

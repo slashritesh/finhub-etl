@@ -9,6 +9,7 @@ class BasicFinancials(SQLModel, table=True):
 
     # Composite Primary Key
     symbol: str = Field(primary_key=True)
+    
     metric_type: str = Field(primary_key=True, alias="metricType")
 
     # All metrics from the 'metric' object

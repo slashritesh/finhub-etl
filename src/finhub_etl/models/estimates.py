@@ -13,7 +13,7 @@ class RevenueEstimate(SQLModel, table=True):
     revenue_high: Optional[float] = Field(default=None, alias="revenueHigh")
     revenue_low: Optional[float] = Field(default=None, alias="revenueLow")
     number_analysts: Optional[int] = Field(default=None, alias="numberAnalysts")
-    
+    freq: Optional[str] = None
     # fix
     quarter: Optional[int] = None
     year: Optional[int] = None
@@ -30,7 +30,7 @@ class EpsEstimate(SQLModel, table=True):
     eps_high: Optional[float] = Field(default=None, alias="epsHigh")
     eps_low: Optional[float] = Field(default=None, alias="epsLow")
     number_analysts: Optional[int] = Field(default=None, alias="numberAnalysts")
-    
+    freq: Optional[str] = None
     # Added fields
     quarter: Optional[int] = None
     year: Optional[int] = None
@@ -46,8 +46,8 @@ class EbitdaEstimate(SQLModel, table=True):
     ebitda_avg: Optional[float] = Field(default=None, alias="ebitdaAvg")
     ebitda_high: Optional[float] = Field(default=None, alias="ebitdaHigh")
     ebitda_low: Optional[float] = Field(default=None, alias="ebitdaLow")
-    number_analysts: Optional[int] = Field(default=None, alias="numberAnalysts")
-    
+    number_analysts:Optional[int] = Field(default=None, alias="numberAnalysts")
+    freq: Optional[str] = None
     # Added fields
     quarter: Optional[int] = None
     year: Optional[int] = None
@@ -64,6 +64,7 @@ class EbitEstimate(SQLModel, table=True):
     ebit_high: Optional[float] = Field(default=None, alias="ebitHigh")
     ebit_low: Optional[float] = Field(default=None, alias="ebitLow")
     number_analysts: Optional[int] = Field(default=None, alias="numberAnalysts")
+    freq: Optional[str] = None
     
     # Added fields
     quarter: Optional[int] = None

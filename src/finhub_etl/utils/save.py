@@ -71,6 +71,9 @@ async def fetch_and_store_data(
             # 2️⃣ Normalize to list
             records = data if isinstance(data, list) else [data]
 
+            print("records formats")
+            print(records[0])
+
             # 3️⃣ Convert dicts → model instances
             model_instances = [model(**record) for record in records]
 

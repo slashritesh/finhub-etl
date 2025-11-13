@@ -1,5 +1,5 @@
 from typing import Optional
-from sqlmodel import SQLModel, Field
+from sqlmodel import Column, SQLModel, Field, Text
 
 
 class CompanyNews(SQLModel, table=True):
@@ -16,5 +16,5 @@ class CompanyNews(SQLModel, table=True):
     image: Optional[str] = None
     related: Optional[str] = None
     source: Optional[str] = None
-    summary: Optional[str] = None
+    summary : Optional[str] = Field(default=None, sa_column=Column(Text))
     url: Optional[str] = None

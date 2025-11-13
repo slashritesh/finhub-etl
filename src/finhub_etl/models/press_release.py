@@ -1,13 +1,14 @@
 from typing import Optional
-from sqlmodel import SQLModel, Field
-
+from sqlmodel import Column, SQLModel, Field, Text
 
 class PressRelease(SQLModel, table=True):
-    """Press Releases - /press-releases"""
     __tablename__ = "press_releases"
 
-    symbol: str = Field(primary_key=True, index=True)
-    date: str = Field(primary_key=True)  # YYYY-MM-DD format
-    title: str = Field(primary_key=True)
+    # Composite primary key (unique per symbol + datetime)
+    symbol: str = Field(primary_key=True)
+    datetime: str = Field(primary_key=True, alias="datetime")  # "2020-08-04 17:06:32"
 
+    # Data fields
+    headline: Optional[str] = None
+    description: Optional[str] = Field(default=None,sa_column=Column(Text))
     url: Optional[str] = None
