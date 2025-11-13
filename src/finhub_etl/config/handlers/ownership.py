@@ -3,7 +3,7 @@
 Reference: https://finnhub.io/docs/api
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, List, Optional
 from finhub_etl.config.finhub import api_client
 
 
@@ -50,29 +50,27 @@ async def get_fund_ownership(
 
 
 async def get_institutional_profile(
-    cik: Optional[str] = None,
-    isin: Optional[str] = None
-) -> Dict[str, Any]:
-    """Get institutional profile information.
+    cik: Optional[str] = None
+) -> List[Dict[str, Any]]: # <-- Return type is a List
+    """
+    Get institutional profile information.
 
     Endpoint: /institutional/profile
-
-    Args:
-        cik: CIK number (optional)
-        isin: ISIN (optional)
-
-    Returns:
-        Institutional profile data
-
-    Note:
-        Provide either cik or isin parameter
     """
     params = {}
     if cik:
         params["cik"] = cik
-    if isin:
-        params["isin"] = isin
-    return await api_client.get("/institutional/profile", params=params)
+        
+    # 1. Fetch the raw, nested response from the API
+    raw_response = await api_client.get("/institutional/profile", params=params)
+
+    # 2. Handle empty or malformed responses
+    if not raw_response or "data" not in raw_response:
+        return []
+
+    # 3. Extract and return the clean list of profile data.
+    #    The 'cik' is already inside each record, so no extra processing is needed.
+    return raw_response["data"]
 
 
 async def get_institutional_portfolio(

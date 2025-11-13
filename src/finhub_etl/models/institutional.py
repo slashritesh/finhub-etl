@@ -1,21 +1,21 @@
 from typing import Optional
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Column, Text
 
 
 class InstitutionalProfile(SQLModel, table=True):
     """Institutional Profile - /institutional/profile"""
     __tablename__ = "institutional_profiles"
+    __table_args__ = {"extend_existing": True}
 
+    # Primary Key
     cik: str = Field(primary_key=True)
-    name: str
-    address: Optional[str] = None
-    city: Optional[str] = None
-    country: Optional[str] = None
+
+    # All fields from the API response
+    firm_type: Optional[str] = Field(default=None, alias="firmType")
     manager: Optional[str] = None
-    phone: Optional[str] = None
-    profile: Optional[str] = None
-    state: Optional[str] = None
-    website: Optional[str] = None
+    philosophy: Optional[str] = Field(default=None, sa_column=Column(Text))
+    profile: Optional[str] = Field(default=None, sa_column=Column(Text))
+    profile_img: Optional[str] = Field(default=None, alias="profileImg")
 
 
 class InstitutionalPortfolio(SQLModel, table=True):

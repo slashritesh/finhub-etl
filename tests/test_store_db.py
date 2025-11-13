@@ -28,7 +28,8 @@ async def main():
     # KEY = "sector_metrics" # done
     # KEY = "market_status" # done
     # KEY = "realtime_quote" # done
-    KEY = "candlestick_data"
+    # KEY = "candlestick_data"
+    KEY = "institutional_profile"  # done
 
     # KEY = "press_release" # remain - date null deafult value
     # KEY = "ipo_calendar" # remain - update model

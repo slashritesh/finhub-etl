@@ -381,14 +381,13 @@ HANDLER_MODEL_DICT = {
         },
     },
     "institutional_profile": {
-        "handler": ownership.get_institutional_profile,
-        "model": InstitutionalProfile,
-        "endpoint": "/institutional/profile",
-        "params": {
-            "cik": "",
-            "isin": "",
-        },
+    "handler": ownership.get_institutional_profile,
+    "model": InstitutionalProfile, # <-- Ensure this points to the new, correct model
+    "endpoint": "/institutional/profile",
+    "params": {
+        "cik": "1067983", # <-- Provide a CIK to test, or leave empty for all
     },
+},
     "institutional_portfolio": {
         "handler": ownership.get_institutional_portfolio,
         "model": InstitutionalPortfolio,
