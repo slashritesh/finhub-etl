@@ -19,17 +19,22 @@ class InstitutionalProfile(SQLModel, table=True):
 
 
 class InstitutionalPortfolio(SQLModel, table=True):
-    """Institutional Portfolio - /institutional/portfolio"""
     __tablename__ = "institutional_portfolios"
 
-    cik: str = Field(primary_key=True, index=True)
-    symbol: str = Field(primary_key=True)
+    cik: str = Field(primary_key=True)
+    symbol: str = Field(primary_key=True)          # portfolio item
     filing_date: str = Field(primary_key=True, alias="filingDate")
 
-    name: str
-    change: Optional[float] = None
+    institution_name: str = Field(alias="name")    # firm name
+    report_date: str = Field(alias="reportDate")
+
+    change: Optional[int] = None
     no_voting: Optional[int] = Field(default=None, alias="noVoting")
+    percentage: Optional[float] = None
+    put_call: Optional[str] = Field(default=None, alias="putCall")
     share: Optional[int] = None
     shared_voting: Optional[int] = Field(default=None, alias="sharedVoting")
     sole_voting: Optional[int] = Field(default=None, alias="soleVoting")
     value: Optional[float] = None
+
+    

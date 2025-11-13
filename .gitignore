@@ -4,3 +4,5 @@ __pycache__
 logs
 
 matched_stocks.csv
+.env
+.env

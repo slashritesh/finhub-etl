@@ -385,7 +385,7 @@ HANDLER_MODEL_DICT = {
         "model": InstitutionalPortfolio,
         "endpoint": "/institutional/portfolio",
         "params": {
-            "cik": "0001067983",
+            "cik": "1000097",
             "from_date": "",
             "to_date": "",
         },

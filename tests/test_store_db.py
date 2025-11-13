@@ -34,6 +34,8 @@ async def main():
     # KEY = "company_ownership"  # done
     # KEY = "earnings_quality_score"  # 
     KEY = "stock_symbols"  # done
+    # KEY = "stock_symbols"  # done
+    # KEY = "institutional_portfolio"  # done
 
     # KEY = "press_release" # remain - date null deafult value
     # KEY = "ipo_calendar" # remain - update model

@@ -5,6 +5,7 @@ Reference: https://finnhub.io/docs/api
 
 from typing import Dict, Any, List, Optional
 from finhub_etl.config.finhub import api_client
+from finhub_etl.models.ownership import InstitutionalOwnership
 
 
 async def get_ownership(
@@ -88,30 +89,46 @@ async def get_institutional_profile(
     #    The 'cik' is already inside each record, so no extra processing is needed.
     return raw_response["data"]
 
-
 async def get_institutional_portfolio(
     cik: str,
     from_date: Optional[str] = None,
     to_date: Optional[str] = None
-) -> Dict[str, Any]:
-    """Get institutional portfolio holdings.
-
-    Endpoint: /institutional/portfolio
-
-    Args:
-        cik: Institution's CIK number
-        from_date: Start date (YYYY-MM-DD)
-        to_date: End date (YYYY-MM-DD)
-
-    Returns:
-        Portfolio holdings data
-    """
+) -> List[Dict[str, Any]]:
+    """Fetch and flatten institutional portfolio holdings as JSON."""
+    
     params = {"cik": cik}
     if from_date:
         params["from"] = from_date
     if to_date:
         params["to"] = to_date
-    return await api_client.get("/institutional/portfolio", params=params)
+
+    data = await api_client.get("/institutional/portfolio", params=params)
+
+    cik_value = data["cik"]
+
+    result = []
+
+    for item in data.get("data", []):
+        filing_date = item["filingDate"]
+
+        for p in item.get("portfolio", []):
+            row = {
+                "symbol": p["symbol"],
+                "cik": cik_value,
+                "name": p["name"],
+                "change": p.get("change"),
+                "filingDate": filing_date,
+                "noVoting": p.get("noVoting"),
+                "portfolioPercent": p.get("percentage"),  # API → DB mapping
+                "share": p.get("share"),
+                "sharedVoting": p.get("sharedVoting"),
+                "soleVoting": p.get("soleVoting"),
+                "value": p.get("value"),
+            }
+            result.append(row)
+
+    return result
+
 
 
 async def get_institutional_ownership(
