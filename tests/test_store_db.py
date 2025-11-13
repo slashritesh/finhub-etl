@@ -30,7 +30,10 @@ async def main():
     # KEY = "realtime_quote" # done
     # KEY = "candlestick_data"
     # KEY = "institutional_profile"  # done
-    KEY = "fund_ownership"  # done
+    # KEY = "fund_ownership"  # done
+    # KEY = "company_ownership"  # done
+    # KEY = "earnings_quality_score"  # 
+    KEY = "stock_symbols"  # done
 
     # KEY = "press_release" # remain - date null deafult value
     # KEY = "ipo_calendar" # remain - update model

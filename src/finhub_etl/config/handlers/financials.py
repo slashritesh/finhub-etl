@@ -130,23 +130,33 @@ async def get_sector_metrics(region: str) -> List[Dict[str, Any]]:
 
 async def get_earnings_quality_score(
     symbol: str,
-    freq: Optional[str] = "quarterly"
-) -> Dict[str, Any]:
-    """Get earnings quality score and detailed information.
-
-    Endpoint: /stock/earnings-quality-score
-
-    Args:
-        symbol: Stock symbol
-        freq: Frequency - 'annual' or 'quarterly' (default: 'quarterly')
-
-    Returns:
-        Earnings quality score data
+    freq: str # This is a required parameter according to the docs
+) -> List[Dict[str, Any]]: # <-- The return type MUST be a List
     """
-    return await api_client.get(
+    Get earnings quality score and formats the data for storage.
+    """
+    params = {"symbol": symbol, "freq": freq}
+        
+    # 1. Fetch the raw, nested response from the API
+    raw_response = await api_client.get(
         "/stock/earnings-quality-score",
-        params={"symbol": symbol, "freq": freq}
+        params=params
     )
+
+    # 2. Handle empty or malformed responses
+    if not raw_response or "data" not in raw_response:
+        return []
+
+    # 3. Extract the list of score records
+    score_list = raw_response["data"]
+
+    # 4. CRITICAL: Inject the symbol and frequency into each record
+    for record in score_list:
+        record["symbol"] = symbol
+        record["freq"] = freq
+
+    # 5. Return the clean, flat list ready for the database
+    return score_list
 
 
 __all__ = [

@@ -265,14 +265,6 @@ HANDLER_MODEL_DICT = {
         },
     },
     # Market Handlers
-    "symbol_lookup": {
-        "handler": market.get_symbol_lookup,
-        "model": StockSymbol,
-        "endpoint": "/search",
-        "params": {
-            "query": "apple",
-        },
-    },
     "stock_symbols": {
         "handler": market.get_stock_symbols,
         "model": StockSymbol,
@@ -363,14 +355,14 @@ HANDLER_MODEL_DICT = {
     },
     # Ownership Handlers
     "company_ownership": {
-        "handler": ownership.get_ownership,
-        "model": CompanyOwnership,
-        "endpoint": "/stock/ownership",
-        "params": {
-            "symbol": "AAPL",
-            "limit": "",
-        },
+    "handler": ownership.get_ownership,
+    "model": CompanyOwnership,
+    "endpoint": "/stock/ownership",
+    "params": {
+        "symbol": "AAPL",
+        "limit": 20 # Optional
     },
+},
     "fund_ownership": {
     "handler": ownership.get_fund_ownership,
     "model": FundOwnership,

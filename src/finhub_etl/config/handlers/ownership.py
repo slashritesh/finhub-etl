@@ -10,22 +10,30 @@ from finhub_etl.config.finhub import api_client
 async def get_ownership(
     symbol: str,
     limit: Optional[int] = None
-) -> Dict[str, Any]:
-    """Get shareholder ownership data.
-
-    Endpoint: /stock/ownership
-
-    Args:
-        symbol: Stock symbol
-        limit: Number of results (optional)
-
-    Returns:
-        Ownership breakdown data
+) -> List[Dict[str, Any]]: # <-- The return type MUST be a List
+    """
+    Get shareholder ownership data and formats it for storage.
     """
     params = {"symbol": symbol}
     if limit:
         params["limit"] = limit
-    return await api_client.get("/stock/ownership", params=params)
+        
+    # 1. Fetch the raw, nested response from the API
+    raw_response = await api_client.get("/stock/ownership", params=params)
+
+    # 2. Handle empty or malformed responses
+    if not raw_response or "ownership" not in raw_response:
+        return []
+
+    # 3. Extract the list of ownership records
+    ownership_list = raw_response["ownership"]
+
+    # 4. CRITICAL: Inject the symbol into each record
+    for record in ownership_list:
+        record["symbol"] = symbol
+
+    # 5. Return the clean, flat list ready for the database
+    return ownership_list
 
 
 async def get_fund_ownership(

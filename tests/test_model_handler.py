@@ -37,7 +37,7 @@ async def test_handler(key: str, **kwargs):
 
 async def main():
     # Test configuration
-    TEST_KEY = "fund_ownership"  # Handler key from mappings
+    TEST_KEY = "stock_symbols"  # Handler key from mappings
 
     # Get params from mappings
     handler_info = HANDLER_MODEL_DICT.get(TEST_KEY)

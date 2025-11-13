@@ -1,14 +1,17 @@
 from typing import Optional
 from sqlmodel import SQLModel, Field
 
-
 class CompanyOwnership(SQLModel, table=True):
     """Company Ownership - /stock/ownership"""
     __tablename__ = "company_ownership"
+    __table_args__ = {"extend_existing": True}
 
+    # Composite Primary Key
     symbol: str = Field(primary_key=True, index=True)
     name: str = Field(primary_key=True)
-    change: Optional[float] = None
+
+    # Fields from the API response
+    change: Optional[int] = None # API shows integer values
     filing_date: Optional[str] = Field(default=None, alias="filingDate")
     share: Optional[int] = None
 
