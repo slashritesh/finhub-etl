@@ -16,14 +16,19 @@ class CompanyOwnership(SQLModel, table=True):
 class FundOwnership(SQLModel, table=True):
     """Fund Ownership - /stock/fund-ownership"""
     __tablename__ = "fund_ownership"
+    __table_args__ = {"extend_existing": True}
 
+    # Composite Primary Key
     symbol: str = Field(primary_key=True, index=True)
     name: str = Field(primary_key=True)
-    change: Optional[float] = None
+
+    # Fields from the API response
+    change: Optional[int] = None # The API response shows integers, not floats
     filing_date: Optional[str] = Field(default=None, alias="filingDate")
     portfolio_percent: Optional[float] = Field(default=None, alias="portfolioPercent")
     share: Optional[int] = None
-    value: Optional[float] = None
+    
+    # The 'value' field was removed as it is not in the API response
 
 
 class InstitutionalOwnership(SQLModel, table=True):

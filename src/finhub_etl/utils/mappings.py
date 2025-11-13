@@ -372,14 +372,14 @@ HANDLER_MODEL_DICT = {
         },
     },
     "fund_ownership": {
-        "handler": ownership.get_fund_ownership,
-        "model": FundOwnership,
-        "endpoint": "/stock/fund-ownership",
-        "params": {
-            "symbol": "AAPL",
-            "limit": "",
-        },
+    "handler": ownership.get_fund_ownership,
+    "model": FundOwnership,
+    "endpoint": "/stock/fund-ownership",
+    "params": {
+        "symbol": "AAPL",
+        "limit": 20 # Optional
     },
+},
     "institutional_profile": {
     "handler": ownership.get_institutional_profile,
     "model": InstitutionalProfile, # <-- Ensure this points to the new, correct model
