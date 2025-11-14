@@ -6,8 +6,7 @@ authors = [
     {name = "Ritesh Mane",email = "maneriteshh@gmail.com"}
 ]
 packages = [
-  { include = "finhub_etl", from = "src" },
-  { include = "worker", from = "src" }
+  { include = "finhub_etl", from = "src" }
 ]
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
