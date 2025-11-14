@@ -2,6 +2,7 @@
 
 Reference: https://finnhub.io/docs/api
 """
+from datetime import datetime
 
 from typing import Dict, Any, Optional, List
 from finhub_etl.config.finhub import api_client
@@ -118,26 +119,18 @@ async def get_quote(symbol: str) -> Dict[str, Any]:
     return data
 
 
+
 async def get_candles(
     symbol: str,
     resolution: str,
     from_timestamp: int,
     to_timestamp: int
-) -> Dict[str, Any]:
-    """Get candlestick data (OHLCV) for stocks.
-
-    Endpoint: /stock/candle
-
-    Args:
-        symbol: Stock symbol
-        resolution: Candle resolution (1, 5, 15, 30, 60, D, W, M)
-        from_timestamp: UNIX timestamp in seconds
-        to_timestamp: UNIX timestamp in seconds
-
-    Returns:
-        OHLCV data arrays (open, high, low, close, volume, timestamp)
+) -> list[dict]:
     """
-    data = await api_client.get(
+    Get OHLCV candles and return list of records (not arrays).
+    """
+
+    response = await api_client.get(
         "/stock/candle",
         params={
             "symbol": symbol,
@@ -146,8 +139,32 @@ async def get_candles(
             "to": to_timestamp
         }
     )
-    data["symbol"] = symbol
-    return data
+
+    # Extract arrays
+    closes = response.get("c", [])
+    highs = response.get("h", [])
+    lows = response.get("l", [])
+    opens = response.get("o", [])
+    volumes = response.get("v", [])
+    times = response.get("t", [])
+
+    candles = []
+
+    # Convert each index → one record
+    for i in range(len(times)):
+        ts = times[i]
+        candles.append({
+            "symbol": symbol,
+            "datetime": datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S"),
+            "t": ts,
+            "o": opens[i],
+            "h": highs[i],
+            "l": lows[i],
+            "c": closes[i],
+            "v": volumes[i]
+        })
+
+    return candles
 
 
 async def get_technical_indicators(

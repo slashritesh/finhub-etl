@@ -8,6 +8,7 @@ class CandlestickData(SQLModel, table=True):
 
     symbol: str = Field(primary_key=True, index=True)
     timestamp: int = Field(primary_key=True, alias="t")
+    datetime: str = Field(primary_key=True, alias="datetime")
 
     close: Optional[float] = Field(default=None, alias="c")
     high: Optional[float] = Field(default=None, alias="h")

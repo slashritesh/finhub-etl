@@ -91,5 +91,7 @@ async def fetch_and_store_data(
         except Exception as e:
             await session.rollback()
             print(f"❌ Failed to fetch/store {model.__name__}: {e}")
+        finally:
+            await engine.dispose()
 
         return None

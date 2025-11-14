@@ -1,55 +1,110 @@
 import asyncio
 import json
+import logging
+from datetime import datetime
+from pathlib import Path
 from finhub_etl.database import engine
 from finhub_etl.utils.save import fetch_and_store_data
 from finhub_etl.utils.mappings import HANDLER_MODEL_DICT
 
+# Setup logging
+log_dir = Path("logs")
+log_dir.mkdir(exist_ok=True)
+
+log_filename = log_dir / f"etl_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(log_filename, encoding='utf-8'),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
 async def main():
-    # KEY = "recommendation_trends" # done
-    # KEY = "market_holiday" # done
-    # KEY = "revenue_estimate" # done
-    # KEY = "eps_estimate" # done
-    # KEY = "ebitda_estimate" # done
-    # KEY = "ebit_estimate" # done
-    # KEY = "company_profile" # done
-    # KEY = "company_profile2" # done
-    # KEY = "company_peers" # done
-    # KEY = "company_executive" # done
-    # KEY = "historical_employee_count" # done
-    # KEY = "company_filing" # done
-    # KEY = "price_metrics" # done
-    # KEY = "historical_market_cap" # done
-    # KEY = "earnings_calendar" # done
-    # KEY = "basic_financials" # done
-    # KEY = "stock_split" # done
-    # KEY = "dividend" # done
-    # KEY = "general_news" # done
-    # KEY = "company_news" # done
-    # KEY = "sector_metrics" # done
-    # KEY = "market_status" # done
-    # KEY = "realtime_quote" # done
-    # KEY = "candlestick_data"
-    # KEY = "institutional_profile"  # done
-    # KEY = "fund_ownership"  # done
-    # KEY = "company_ownership"  # done
-    # KEY = "earnings_quality_score"  # 
-    KEY = "stock_symbols"  # done
-    # KEY = "stock_symbols"  # done
-    # KEY = "institutional_portfolio"  # done
+    # Array of keys to process
+    KEYS = [
+        # "recommendation_trends",
+        # "market_holiday",
+        # "revenue_estimate",
+        # "eps_estimate",
+        # "ebitda_estimate",
+        # "ebit_estimate",
+        # "company_profile",
+        # "company_profile2",
+        # "company_peers",
+        # "company_executive",
+        # "historical_employee_count",
+        # "company_filing",
+        # "price_metrics",
+        # "historical_market_cap",
+        # "earnings_calendar",
+        # "basic_financials",
+        # "stock_split",
+        # "dividend",
+        # "general_news",
+        # "company_news",
+        # "sector_metrics",
+        # "market_status",
+        # "realtime_quote",
+        "candlestick_data",
+        # "institutional_profile",
+        # "fund_ownership",
+        # "company_ownership",
+        # "earnings_quality_score",
+        # "stock_symbols",
+    ]
 
-    # KEY = "press_release" # remain - date null deafult value
-    # KEY = "ipo_calendar" # remain - update model
-    # KEY = "company_financials" # doubt - 4 statements
+    # Keys that need attention:
+    # "press_release" - date null default value issue
+    # "ipo_calendar" - need to update model
+    # "company_financials" - 4 statements
 
-    handler = HANDLER_MODEL_DICT[KEY]
-    print(handler)
+    logger.info(f"Starting ETL process for {len(KEYS)} handlers")
+    logger.info(f"Log file: {log_filename}")
 
+    success_count = 0
+    failure_count = 0
+    failed_keys = []
 
-    await fetch_and_store_data(
-        handler=handler["handler"],
-        model=handler["model"],
-        **handler["params"],
-    )
+    for KEY in KEYS:
+        logger.info(f"\n{'='*60}")
+        logger.info(f"Processing: {KEY}")
+        logger.info(f"{'='*60}")
+
+        try:
+            handler = HANDLER_MODEL_DICT[KEY]
+            # logger.info(f"Handler configuration: {handler}")
+
+            await fetch_and_store_data(
+                handler=handler["handler"],
+                model=handler["model"],
+                **handler["params"],
+            )
+            logger.info(f"[SUCCESS] {KEY} processed successfully")
+            success_count += 1
+
+        except Exception as e:
+            logger.error(f"[FAILURE] {KEY} - Error: {str(e)}", exc_info=True)
+            failure_count += 1
+            failed_keys.append(KEY)
+            continue
+
+    # Summary
+    logger.info(f"\n{'='*60}")
+    logger.info("ETL Process Summary")
+    logger.info(f"{'='*60}")
+    logger.info(f"Total handlers: {len(KEYS)}")
+    logger.info(f"Successful: {success_count}")
+    logger.info(f"Failed: {failure_count}")
+
+    if failed_keys:
+        logger.error(f"Failed handlers: {', '.join(failed_keys)}")
+
+    logger.info(f"Log file saved: {log_filename}")
 
 
 
