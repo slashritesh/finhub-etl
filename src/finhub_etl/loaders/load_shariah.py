@@ -22,7 +22,7 @@ async def main():
     """Load matched stocks from CSV file."""
 
     # Path to CSV file
-    csv_path = Path(__file__).parent.parent / "matched_stocks.csv"
+    csv_path = "data/matched_stocks.csv"
 
     print(f"Loading matched stocks from: {csv_path}")
     print(f"File exists: {csv_path.exists()}")

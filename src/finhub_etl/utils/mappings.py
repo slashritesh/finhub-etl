@@ -355,31 +355,31 @@ HANDLER_MODEL_DICT = {
     },
     # Ownership Handlers
     "company_ownership": {
-    "handler": ownership.get_ownership,
-    "model": CompanyOwnership,
-    "endpoint": "/stock/ownership",
-    "params": {
-        "symbol": "AAPL",
-        "limit": 20 # Optional
+        "handler": ownership.get_ownership,
+        "model": CompanyOwnership,
+        "endpoint": "/stock/ownership",
+        "params": {
+            "symbol": "AAPL",
+            "limit": 20,  # Optional
+        },
     },
-},
     "fund_ownership": {
-    "handler": ownership.get_fund_ownership,
-    "model": FundOwnership,
-    "endpoint": "/stock/fund-ownership",
-    "params": {
-        "symbol": "AAPL",
-        "limit": 20 # Optional
+        "handler": ownership.get_fund_ownership,
+        "model": FundOwnership,
+        "endpoint": "/stock/fund-ownership",
+        "params": {
+            "symbol": "AAPL",
+            "limit": 20,  # Optional
+        },
     },
-},
     "institutional_profile": {
-    "handler": ownership.get_institutional_profile,
-    "model": InstitutionalProfile, # <-- Ensure this points to the new, correct model
-    "endpoint": "/institutional/profile",
-    "params": {
-        "cik": "1067983", # <-- Provide a CIK to test, or leave empty for all
+        "handler": ownership.get_institutional_profile,
+        "model": InstitutionalProfile,  # <-- Ensure this points to the new, correct model
+        "endpoint": "/institutional/profile",
+        "params": {
+            "cik": "1067983",  # <-- Provide a CIK to test, or leave empty for all
+        },
     },
-},
     "institutional_portfolio": {
         "handler": ownership.get_institutional_portfolio,
         "model": InstitutionalPortfolio,

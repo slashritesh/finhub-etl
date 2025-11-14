@@ -6,7 +6,8 @@ authors = [
     {name = "Ritesh Mane",email = "maneriteshh@gmail.com"}
 ]
 packages = [
-  { include = "finhub_etl", from = "src" }
+  { include = "finhub_etl", from = "src" },
+  { include = "worker", from = "src" }
 ]
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
@@ -17,7 +18,8 @@ dependencies = [
     "aiomysql (>=0.3.2,<0.4.0)",
     "httpx (>=0.27.0,<1.0.0)",
     "cryptography (>=46.0.3,<47.0.0)",
-    "greenlet (>=3.2.4,<4.0.0)"
+    "greenlet (>=3.2.4,<4.0.0)",
+    "apscheduler (>=3.11.1,<4.0.0)"
 ]
 [tool.setuptools.packages.find]
 where = ["src"]

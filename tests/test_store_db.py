@@ -50,12 +50,13 @@ async def main():
         # "sector_metrics",
         # "market_status",
         # "realtime_quote",
-        "candlestick_data",
+        # "candlestick_data",
+        # "reported_financials", 
         # "institutional_profile",
         # "fund_ownership",
         # "company_ownership",
         # "earnings_quality_score",
-        # "stock_symbols",
+        # "stock_symbols"
     ]
 
     # Keys that need attention:

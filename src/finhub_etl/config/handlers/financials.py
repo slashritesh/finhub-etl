@@ -72,26 +72,34 @@ async def get_financials(
     # 5. Return the clean, flat list ready for the database
     return financials_list
 
-
-async def get_financials_reported(
-    symbol: str,
-    freq: Optional[str] = "annual"
-) -> Dict[str, Any]:
-    """Get financial statements as reported (not standardized).
-
-    Endpoint: /stock/financials-reported
-
-    Args:
-        symbol: Stock symbol
-        freq: Frequency - 'annual' or 'quarterly' (default: 'annual')
-
-    Returns:
-        As-reported financial statements
+async def get_financials_reported(symbol: str, freq: Optional[str] = "annual") -> List[Dict[str, Any]]:
     """
-    return await api_client.get(
+    Fetch and flatten financials-reported data so each filing is a DB-ready dict.
+    """
+    raw = await api_client.get(
         "/stock/financials-reported",
         params={"symbol": symbol, "freq": freq}
     )
+
+    filings = []
+
+    for item in raw.get("data", []):
+        filings.append({
+            "symbol": item["symbol"],
+            "cik": item["cik"],
+            "access_number": item["accessNumber"],
+            "year": item.get("year"),
+            "quarter": item.get("quarter"),
+            "form": item.get("form"),
+            "start_date": item.get("startDate"),
+            "end_date": item.get("endDate"),
+            "filed_date": item.get("filedDate"),
+            "accepted_date": item.get("acceptedDate"),
+            "report": item.get("report")  # JSON blob to store
+        })
+
+    return filings
+
 
 
 async def get_sector_metrics(region: str) -> List[Dict[str, Any]]:
