@@ -1,8 +1,74 @@
-.env
-data
-__pycache__
-logs
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-matched_stocks.csv
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
 .env
-.env
+*.env
+!.env.example
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Poetry
+poetry.lock
+
+# Alembic
+*.db
+*.sqlite
+
+# Logs
+*.log
+logs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Docker
+docker-compose.override.yml
+
+# Database
+*.sql
+*.dump
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
