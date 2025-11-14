@@ -443,4 +443,62 @@ HANDLER_MODEL_DICT = {
     },
 }
 
-__all__ = ["HANDLER_MODEL_DICT"]
+
+
+WITH_SYMBOL_KEY = [
+  "recommendation_trends",
+  "price_target",
+  "upgrade_downgrade",
+  "revenue_estimate",
+  "eps_estimate",
+  "ebitda_estimate",
+  "ebit_estimate",
+  "company_profile",
+  "company_profile2",
+  "company_peers",
+  "company_executive",
+  "historical_employee_count",
+  "company_filing",
+  "price_metrics",
+  "historical_market_cap",
+  "earnings_data",
+  "earnings_calendar",
+  "basic_financials",
+  "company_financials",
+  "reported_financials",
+  "earnings_quality_score",
+  "realtime_quote",
+  "candlestick_data",
+  "technical_indicator",
+  "company_news",
+  "press_release",
+  "company_ownership",
+  "fund_ownership",
+  "institutional_ownership",
+  "insider_transaction",
+  "dividend",
+  "stock_split"
+]
+
+
+
+def get_symbol_required_handlers(handler_dict: dict) -> dict:
+    """
+    Return a dictionary containing only the handlers
+    whose params include a 'symbol' key.
+    """
+    filtered = {}
+    for key, config in handler_dict.items():
+        params = config.get("params", {})
+        if "symbol" in params:
+            filtered[key] = config
+    return filtered
+
+
+HANDLER_WITH_SYMBOL = get_symbol_required_handlers(HANDLER_MODEL_DICT)
+
+
+__all__ = ["HANDLER_MODEL_DICT","WITH_SYMBOL_KEY","HANDLER_WITH_SYMBOL"]
+
+
+

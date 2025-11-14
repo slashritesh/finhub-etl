@@ -6,7 +6,7 @@ Based on Finnhub API documentation: https://finnhub.io/docs/api
 All handlers are standalone async functions that import api_client internally.
 
 Example:
-    >>> from finhub_etl.config.handlers import analyst, company
+    >>> from worker.config.handlers import analyst, company
     >>>
     >>> # Get company profile
     >>> profile = await company.get_company_profile2("AAPL")

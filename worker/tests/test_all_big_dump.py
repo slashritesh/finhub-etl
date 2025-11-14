@@ -2,10 +2,10 @@ import asyncio
 import logging
 from datetime import datetime
 from pathlib import Path
-# from finhub_etl.database import engine
-from finhub_etl.utils.save import fetch_and_store_data
-from finhub_etl.utils.mappings import HANDLER_MODEL_DICT
-from finhub_etl.loaders.in_universe import get_symbols_list
+# from worker.database import engine
+from worker.utils.save import fetch_and_store_data
+from worker.utils.mappings import HANDLER_MODEL_DICT
+from worker.loaders.in_universe import get_symbols_list
 
 # Setup logging
 log_dir = Path("logs")
@@ -148,3 +148,6 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+
+

@@ -4,8 +4,8 @@ Reference: https://finnhub.io/docs/api
 """
 
 from typing import Dict, Any, List, Optional
-from finhub_etl.config.finhub import api_client
-from finhub_etl.models.ownership import InstitutionalOwnership
+from worker.config.finhub import api_client
+from worker.models.ownership import InstitutionalOwnership
 
 
 async def get_ownership(

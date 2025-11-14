@@ -6,8 +6,9 @@ authors = [
     {name = "Ritesh Mane",email = "maneriteshh@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<4.0"
 dependencies = [
+    "aio-pika (>=9.5.8,<10.0.0)"
 ]
 
 [tool.poetry]

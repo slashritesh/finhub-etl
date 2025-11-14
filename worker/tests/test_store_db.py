@@ -3,9 +3,9 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from finhub_etl.database import engine
-from finhub_etl.utils.save import fetch_and_store_data
-from finhub_etl.utils.mappings import HANDLER_MODEL_DICT
+from worker.database import engine
+from worker.utils.save import fetch_and_store_data
+from worker.utils.mappings import HANDLER_MODEL_DICT
 
 # Setup logging
 log_dir = Path("logs")
@@ -92,6 +92,7 @@ async def main():
             logger.error(f"[FAILURE] {KEY} - Error: {str(e)}", exc_info=True)
             failure_count += 1
             failed_keys.append(KEY)
+            await engine.dispose()
             continue
 
     # Summary

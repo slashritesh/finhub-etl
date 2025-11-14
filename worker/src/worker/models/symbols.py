@@ -2,6 +2,8 @@ from typing import Optional
 from sqlmodel import SQLModel, Field
 
 class StockSymbol(SQLModel, table=True):
+    __tablename__ = "stocksymbol"
+
     symbol: str = Field(primary_key=True, nullable=False)
     display_symbol: Optional[str] = Field(default=None, alias="displaySymbol")
     description: Optional[str] = None

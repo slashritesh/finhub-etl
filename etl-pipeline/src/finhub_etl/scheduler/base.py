@@ -9,6 +9,19 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 import logging
 
+from finhub_etl.scheduler.jobs.us_exchange_jobs import (
+    us_premarket_open_job,
+    us_postmarket_close_job,
+)
+from finhub_etl.scheduler.jobs.uae_exchange_jobs import (
+    uae_market_open_job,
+    uae_market_close_job,
+)
+from finhub_etl.scheduler.jobs.uk_exchange_jobs import (
+    uk_market_open_job,
+    uk_market_close_job,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,29 +38,59 @@ def create_scheduler():
 
     scheduler = BackgroundScheduler(executors=executors)
 
-    # Example job configuration:
-    # scheduler.add_job(
-    #     func=your_job_function,
-    #     trigger=CronTrigger(
-    #         hour=0,
-    #         minute=0,
-    #     ),
-    #     id="unique_job_id",
-    #     name="Job description",
-    #     replace_existing=True,
-    # )
+    # US Exchange Jobs
+    scheduler.add_job(
+        func=us_premarket_open_job,
+        trigger=CronTrigger(hour=12, minute=0),
+        id="us_premarket_open",
+        name="US Pre-Market Open (12:00 IST)",
+        replace_existing=True,
+    )
 
-    # Example interval job:
-    # scheduler.add_job(
-    #     func=your_interval_function,
-    #     trigger=IntervalTrigger(hours=1),
-    #     id="interval_job_id",
-    #     name="Runs every hour",
-    #     replace_existing=True,
-    # )
+    scheduler.add_job(
+        func=us_postmarket_close_job,
+        trigger=CronTrigger(hour=4, minute=0),
+        id="us_postmarket_close",
+        name="US Post-Market Close (04:00 IST)",
+        replace_existing=True,
+    )
+
+    # UAE Exchange Jobs
+    scheduler.add_job(
+        func=uae_market_open_job,
+        trigger=CronTrigger(hour=10, minute=0),
+        id="uae_market_open",
+        name="UAE Market Open (10:00 IST)",
+        replace_existing=True,
+    )
+
+    scheduler.add_job(
+        func=uae_market_close_job,
+        trigger=CronTrigger(hour=14, minute=45),
+        id="uae_market_close",
+        name="UAE Market Close (14:45 IST)",
+        replace_existing=True,
+    )
+
+    # UK Exchange Jobs
+    scheduler.add_job(
+        func=uk_market_open_job,
+        trigger=CronTrigger(hour=11, minute=0),
+        id="uk_market_open",
+        name="UK Market Open (11:00 IST)",
+        replace_existing=True,
+    )
+
+    scheduler.add_job(
+        func=uk_market_close_job,
+        trigger=CronTrigger(hour=20, minute=30),
+        id="uk_market_close",
+        name="UK Market Close (20:30 IST)",
+        replace_existing=True,
+    )
 
     scheduler.start()
-    logger.info("✅ Scheduler started successfully")
+    logger.info("✅ Scheduler started successfully with 6 exchange jobs")
 
     return scheduler
 

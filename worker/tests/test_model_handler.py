@@ -1,6 +1,6 @@
 import asyncio
 import json
-from finhub_etl.utils.mappings import HANDLER_MODEL_DICT
+from worker.utils.mappings import HANDLER_MODEL_DICT
 
 
 async def test_handler(key: str, **kwargs):

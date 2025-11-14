@@ -4,7 +4,7 @@ Reference: https://finnhub.io/docs/api
 """
 
 from typing import Dict, Any, List
-from finhub_etl.config.finhub import api_client
+from worker.config.finhub import api_client
 
 
 async def get_ipo_calendar(

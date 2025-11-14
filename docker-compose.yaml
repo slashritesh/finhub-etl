@@ -1,4 +1,8 @@
 services:
+  worker:
+    
+  etl-pipeline:
+
   rabbitmq:
     image: rabbitmq:3.12-management
     container_name: finhub-rabbitmq

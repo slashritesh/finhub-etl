@@ -118,7 +118,7 @@ async def fetch_and_flatten(
 # Example 4: Using your existing Finnhub client pattern
 # Uncomment and modify if you want to use the existing api_client
 """
-from finhub_etl.config.finhub import api_client
+from worker.config.finhub import api_client
 
 async def fetch_using_finhub_client(symbol: str) -> Dict[str, Any]:
     '''

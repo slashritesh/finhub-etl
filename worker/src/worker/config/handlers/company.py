@@ -4,7 +4,7 @@ Reference: https://finnhub.io/docs/api
 """
 
 from typing import Optional, List, Dict, Any
-from finhub_etl.config.finhub import api_client
+from worker.config.finhub import api_client
 
 
 async def get_company_profile(

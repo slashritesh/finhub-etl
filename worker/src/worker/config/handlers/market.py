@@ -5,8 +5,8 @@ Reference: https://finnhub.io/docs/api
 from datetime import datetime
 
 from typing import Dict, Any, Optional, List
-from finhub_etl.config.finhub import api_client
-from finhub_etl.models.market_info import MarketHoliday
+from worker.config.finhub import api_client
+from worker.models.market_info import MarketHoliday
 
 
 async def get_symbol_lookup(query: str) -> Dict[str, Any]:
