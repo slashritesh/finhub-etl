@@ -56,6 +56,3 @@ def get_symbols_list(file_path: str = DIR) -> List[str]:
 
 
 
-symbols = get_symbols_list()
-
-print(len(symbols))

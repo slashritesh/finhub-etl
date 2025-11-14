@@ -3,7 +3,7 @@ Scheduler base configuration for running periodic ETL jobs.
 Uses APScheduler with ThreadPoolExecutor for parallel job execution.
 """
 
-from concurrent.futures import ThreadPoolExecutor
+from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
